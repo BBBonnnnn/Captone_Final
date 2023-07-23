@@ -16,7 +16,6 @@ import './assets/scss/style.scss'
 
 
 
-
 export const history: BrowserHistory | any = createBrowserHistory();
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
