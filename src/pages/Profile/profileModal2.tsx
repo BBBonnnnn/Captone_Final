@@ -8,30 +8,30 @@ import { editProfile } from '../../redux/reducers/userReducer';
 type Props = {};
 
 export interface ProfileForm {
-    email:string;
+    email: string;
     phone: string;
     name: string;
     birthday: string;
     gender: string;
-     skill: string[];
-     certification: string[];
+    skill: string[];
+    certification: string[];
 }
 
 const ProfileModal2 = (props: Props) => {
     const { userLogin, userProfile } = useSelector((state: RootState) => state.userReducer);
-    
-    const dispatch:DispatchType = useDispatch();
+
+    const dispatch: DispatchType = useDispatch();
 
 
 
     const [formState, setFormState] = useState<ProfileForm>({
-        email: userProfile?.email||'',
+        email: userProfile?.email || '',
         name: userProfile?.name || '',
         phone: userProfile?.phone ? String(userProfile.phone) : '',
         gender: userProfile?.gender ? String(userProfile.gender) : '',
         birthday: userProfile?.birthday || '',
         skill: userProfile?.skill || [],
-         certification: userProfile?.certification || [],
+        certification: userProfile?.certification || [],
     });
 
 
@@ -50,7 +50,7 @@ const ProfileModal2 = (props: Props) => {
         //console.log('Updated errors:', errors);
     }, [errors]);
 
-    
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         const id = e.target.id;
@@ -98,32 +98,32 @@ const ProfileModal2 = (props: Props) => {
             }
         }
 
-        
+
 
 
 
         // Update the form state and errors state with the new values
-        if(id == "skill" || id == "certification" ){
+        if (id == "skill" || id == "certification") {
             setFormState((prevFormState) => ({
                 ...prevFormState,
                 [id]: [value],
             }));
         }
-        else{
+        else {
             setFormState((prevFormState) => ({
                 ...prevFormState,
                 [id]: value,
             }));
         }
-        if(id == "skill" || id == "certification" ){
+        if (id == "skill" || id == "certification") {
             // 2 thang nay khong co validation
-        }else{
+        } else {
             setErrors((prevErrors) => ({
                 ...prevErrors,
                 [id]: messageError,
             }));
         }
-        
+
 
         console.log("formState: ", formState);
     };
@@ -131,107 +131,121 @@ const ProfileModal2 = (props: Props) => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault();
-        const ListCheck :any = errors;
+        const ListCheck: any = errors;
         let output = true;
         for (let key in ListCheck) {
-            if (ListCheck[key] !== ''){
+            if (ListCheck[key] !== '') {
                 output = false
             }
-            
+
         }
-        if(output == true){
+        if (output == true) {
             const actionAsync = editProfile(userLogin.user.id, formState);
             dispatch(actionAsync);
-        }else{
+        } else {
             alert('check your Input again please');
         }
-        
-        
+
+
     };
 
     return (
-        <form className="container my-5" onSubmit={handleSubmit}>
-            <div className="mb-3">
-                <p>email</p>
-                <input data-type="email" data-min-max-length="[9,30]" className="form-control" id="email" name="email" onChange={handleChange} value={formState.email} />
-                <p className='text text-danger'>{errors.email}</p>
-            </div>
-            <div className="mb-3">
-                <p>Phone</p>
-                <input data-type="number" data-min-max-length="[9,10]" className="form-control" id="phone" name="phone" onChange={handleChange} value={formState.phone} />
-                <p className='text text-danger'>{errors.phone}</p>
-            </div>
+        <div className="modal fade" id="modalId" tabIndex={-1} data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="modalTitleId">Modal title</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                    </div>
 
-            <div className="mb-3">
-                <label htmlFor="name">Name</label>
-                <input data-type="letter" className="form-control" id="name" name="name" onChange={handleChange} value={formState.name} />
-                <p className='text text-danger'>{errors.name}</p>
-            </div>
-            <div className="mb-3">
-                <label htmlFor="birthday">Birthday</label>
-                <input
-                    type="date"
-                    className="form-control"
-                    id="birthday"
-                    name="birthday"
-                    onChange={handleChange}
-                    value={formState.birthday}
-                />
-                <p className='text text-danger'>{errors.birthday}</p>
-            </div>
-            <div className="mb-3">
-                <p>Gender</p>
-                <div className="form-group">
-                    <label>
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="true"
-                            id='gender'
-                            onChange={handleChange}
-                            
-                        />{' '}
-                        Male
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="false"
-                            id='gender'
-                            onChange={handleChange}
-                        />{' '}
-                        Female
-                    </label>
+                    <div className="modal-body">
+                        <form className="container my-5" onSubmit={handleSubmit}>
+                            <div className="mb-3">
+                                <p>email</p>
+                                <input data-type="email" data-min-max-length="[9,30]" className="form-control" id="email" name="email" onChange={handleChange} value={formState.email} />
+                                <p className='text text-danger'>{errors.email}</p>
+                            </div>
+                            <div className="mb-3">
+                                <p>Phone</p>
+                                <input data-type="number" data-min-max-length="[9,10]" className="form-control" id="phone" name="phone" onChange={handleChange} value={formState.phone} />
+                                <p className='text text-danger'>{errors.phone}</p>
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="name">Name</label>
+                                <input data-type="letter" className="form-control" id="name" name="name" onChange={handleChange} value={formState.name} />
+                                <p className='text text-danger'>{errors.name}</p>
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="birthday">Birthday</label>
+                                <input
+                                    type="date"
+                                    className="form-control"
+                                    id="birthday"
+                                    name="birthday"
+                                    onChange={handleChange}
+                                    value={formState.birthday}
+                                />
+                                <p className='text text-danger'>{errors.birthday}</p>
+                            </div>
+                            <div className="mb-3">
+                                <p>Gender</p>
+                                <div className="form-group">
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="gender"
+                                            value="true"
+                                            id='gender'
+                                            onChange={handleChange}
+
+                                        />{' '}
+                                        Male
+                                    </label>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="gender"
+                                            value="false"
+                                            id='gender'
+                                            onChange={handleChange}
+                                        />{' '}
+                                        Female
+                                    </label>
+                                </div>
+                                <p className='text text-danger'>{errors.gender}</p>
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="skill">Skills</label>
+                                <input
+                                    className="form-control"
+                                    id="skill"
+                                    name="skill"
+                                    onChange={handleChange}
+                                    value={formState.skill}
+                                />
+
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="certification">Certification</label>
+                                <input
+                                    className="form-control"
+                                    id="certification"
+                                    name="certification"
+                                    onChange={handleChange}
+                                    value={formState.certification}
+                                />
+                            </div>
+                            <button type="submit" className="btn btn-primary">
+                                Save Changes
+                            </button>
+                        </form>
+
+                    </div>
                 </div>
-                <p className='text text-danger'>{errors.gender}</p>
             </div>
-             <div className="mb-3">
-                <label htmlFor="skill">Skills</label>
-                <input
-                    className="form-control"
-                    id="skill"
-                    name="skill"
-                    onChange={handleChange}
-                    value={formState.skill}
-                />
-
-            </div>
-
-            <div className="mb-3">
-                <label htmlFor="certification">Certification</label>
-                <input
-                    className="form-control"
-                    id="certification"
-                    name="certification"
-                    onChange={handleChange}
-                    value={formState.certification}
-                />
-            </div> 
-            <button type="submit" className="btn btn-primary">
-                Save Changes
-            </button>
-        </form>
+        </div>
     );
 };
 

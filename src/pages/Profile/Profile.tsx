@@ -39,9 +39,22 @@ const Profile = (props: Props) => {
           <p>Name: {userProfile?.name}</p>
           <p>Birthday: {userProfile?.birthday}</p>
           {renderGender()}
-          <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Update User</button>
+          <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId">Launch</button>
           <ProfileModal2/>
+          
+          
+      
+        
+        
 
+        
+        
+      
+    
+
+          
+          
+          
         </div>
         <div className='col-8'>
 
