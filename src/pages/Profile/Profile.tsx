@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import ProfileModal from './ProfileModal'
+
 import { getProfileApi } from '../../redux/reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { DispatchType, RootState } from '../../redux/configStore'
+import ProfileModal2 from './profileModal2'
 
 type Props = {}
 
@@ -20,9 +21,9 @@ const Profile = (props: Props) => {
     getProfileApiFunction();
     
   },[]);
-  console.log('userProfile: ', userProfile?.email)
+  
   const renderGender = () => {
-    if(userProfile.gender == true){
+    if(userProfile?.gender == true){
       return <p>Gender: Male</p>
     }else{
       return <p>Gender: Female</p>
@@ -34,15 +35,12 @@ const Profile = (props: Props) => {
         <div className='col-4'>
           <h1>User Profile</h1>
           <p>Email: {userProfile?.email}</p>
-          <p>Phone: {userProfile.phone}</p>
-          <p>Name: {userProfile.name}</p>
-          <p>Birthday: {userProfile.birthday}</p>
+          <p>Phone: {userProfile?.phone}</p>
+          <p>Name: {userProfile?.name}</p>
+          <p>Birthday: {userProfile?.birthday}</p>
           {renderGender()}
-
           <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Update User</button>
-
-          <ProfileModal />
-
+          <ProfileModal2/>
 
         </div>
         <div className='col-8'>

@@ -4,6 +4,7 @@ import { USER_LOGIN, getStoreJson, http, setStoreJson } from '../../util/22-06-2
 import { FormRegister } from '../../pages/Register/Register';
 import { FormValue } from '../../pages/Login/Login';
 import { history } from '../..';
+import { ProfileForm } from '../../pages/Profile/profileModal2';
 
 
 
@@ -42,10 +43,10 @@ export interface UserProfile {
 }
 interface UserState {
     userLogin: UserLogin | null | any,
-    userProfile:UserProfile | null | any
+    userProfile:UserProfile|null
 }
 
-const initialState = {
+const initialState : UserState = {
     userLogin: getStoreJson(USER_LOGIN),
     userProfile: null
 }
@@ -95,6 +96,21 @@ export const getProfileApi = (id:number) => {
         if (res) {
             const action : PayloadAction<UserProfile> = getProfileAction(res.data.content);
             dispatch(action);
+        }
+
+
+    }
+}
+
+export const editProfile = (id:number, values:ProfileForm) =>{
+    return async (dispatch: DispatchType) => {
+        console.log(values);
+        let res = await http.put(`/api/users/${id}`, values );
+        console.log(res)
+        if(res){
+            const action : PayloadAction<UserProfile> = getProfileAction(res.data.content);
+            dispatch(action);
+            alert('edit thanh cong')
         }
 
 
