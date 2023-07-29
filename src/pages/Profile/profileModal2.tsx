@@ -150,8 +150,8 @@ const ProfileModal2 = (props: Props) => {
     };
 
     return (
-        <div className="modal fade" id="modalId" tabIndex={-1} data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-            <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+        <div className="modal fade bd-example-modal-lg" id="modalId" tabIndex={-1} data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="modalTitleId">Modal title</h5>
@@ -159,7 +159,7 @@ const ProfileModal2 = (props: Props) => {
                     </div>
 
                     <div className="modal-body">
-                        <form className="container my-5" onSubmit={handleSubmit}>
+                        <form className=" my-5" onSubmit={handleSubmit}>
                             <div className="mb-3">
                                 <p>email</p>
                                 <input data-type="email" data-min-max-length="[9,30]" className="form-control" id="email" name="email" onChange={handleChange} value={formState.email} />
