@@ -6,6 +6,7 @@ import { FormValue } from '../../pages/Login/Login';
 import { history } from '../..';
 
 
+
 export interface UserLogin {
     user: {
         id: number,
@@ -24,27 +25,48 @@ export interface UserLogin {
     token: string
 }
 
-interface UserStateLogin {
-    userLogin: UserLogin | null | any
+
+export interface UserProfile {
+    id: number,
+    name: string,
+    email: string,
+    password: string,
+    phone: number,
+    birthday: string,
+    avatar: string,
+    gender: boolean,
+    role: string,
+    skill: string[],
+    certification: string[],
+    bookingJob: string[]
 }
+interface UserState {
+    userLogin: UserLogin | null | any,
+    userProfile:UserProfile | null | any
+}
+
 const initialState = {
-    userLogin: getStoreJson(USER_LOGIN)
+    userLogin: getStoreJson(USER_LOGIN),
+    userProfile: null
 }
 
 const userReducer = createSlice({
     name: 'userReducer',
     initialState,
     reducers: {
-        loginAction: (state: UserStateLogin, action: PayloadAction<UserLogin>) => {
+        loginAction: (state: UserState, action: PayloadAction<UserLogin>) => {
             state.userLogin = action.payload;
             console.log("state: ", state.userLogin);
-        }
+        },
 
-
+        getProfileAction: (state: UserState, action: PayloadAction<UserProfile>) => {
+            state.userProfile = action.payload;
+            console.log("state.userProfile: ", state.userProfile);
+        },
     }
 });
 
-export const { loginAction } = userReducer.actions
+export const { loginAction, getProfileAction } = userReducer.actions
 
 export default userReducer.reducer
 
@@ -60,6 +82,19 @@ export const loginActionApi = (userLoginFrom: FormValue) => {
             const action: PayloadAction<UserLogin> = loginAction(res.data.content);
             dispatch(action);
             history.push("/");
+        }
+
+
+    }
+}
+
+export const getProfileApi = (id:number) => {
+    // console.log('here1');
+    return async (dispatch: DispatchType) => {
+        let res = await http.get(`/api/users/${id}`);
+        if (res) {
+            const action : PayloadAction<UserProfile> = getProfileAction(res.data.content);
+            dispatch(action);
         }
 
 

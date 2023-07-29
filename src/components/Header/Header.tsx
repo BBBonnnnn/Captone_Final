@@ -18,9 +18,13 @@ const Header = (props: Props) => {
 
     const dispatch: DispatchType = useDispatch();
     const renderLogin = () => {
-        if (userLogin.token) {
+        if (userLogin == null || userLogin.token) {
             return <>
-
+                <li className="nav-item">
+                    <NavLink className="nav-link" to="/profile">
+                        <i className="fa fa-user" aria-hidden="true"></i>
+                    </NavLink>
+                </li>
                  <li className="nav-item">
                     <span style={{ cursor: 'pointer' }} className="nav-link" onClick={() => {
                         //clear localstore,cookie => dispatch userLogin = {}

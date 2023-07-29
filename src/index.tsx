@@ -13,6 +13,7 @@ import Register from './pages/Register/Register';
 import { Provider } from 'react-redux'
 import { store } from './redux/configStore';
 import './assets/scss/style.scss'
+import Profile from './pages/Profile/Profile';
 
 
 
@@ -31,7 +32,7 @@ root.render(
           <Route path='/jobtype' element={<JobType />}></Route>
           <Route path='/detailjob' element={<DetailJob />}></Route>
 
-
+          <Route path='/profile' element={<Profile />}></Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/register' element={<Register />}></Route>
           <Route path='*' element={<Navigate to="" />}></Route>
