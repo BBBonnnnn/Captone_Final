@@ -51,7 +51,7 @@ httpNonAuth.interceptors.request.use((config: any) => {
 http.interceptors.request.use((config: any) => {
     config.headers = { ...config.headers }
     let token = getStoreJson(USER_LOGIN)?.token;
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.token = `${token}`;
     config.headers.tokenCybersoft = `${tokenCybersoft}`;
     return config
 }, err => {
@@ -61,7 +61,7 @@ http.interceptors.request.use((config: any) => {
 
 //Cấu hình cho response (kết quả trả về từ api)
 http.interceptors.response.use((res) => {
-    console.log(res);
+    
     return res;
 }, (err) => {
     //Xử lý lỗi cho api bị lỗi theo status code 

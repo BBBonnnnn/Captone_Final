@@ -83,6 +83,8 @@ export const loginActionApi = (userLoginFrom: FormValue) => {
             const action: PayloadAction<UserLogin> = loginAction(res.data.content);
             dispatch(action);
             history.push("/");
+        }else{
+            alert('Login failed please check again')
         }
 
 
@@ -97,6 +99,8 @@ export const getProfileApi = (id:number) => {
             setStoreJson("userProfile", res.data.content);
             const action : PayloadAction<UserProfile> = getProfileAction(res.data.content);
             dispatch(action);
+        }else{
+            alert('cannot get profile')
         }
 
 

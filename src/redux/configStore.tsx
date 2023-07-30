@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './reducers/userReducer';
+import renderListReducer from './reducers/renderListReducer';
 
 export const store = configureStore({
     reducer:{
-        userReducer:userReducer
+        userReducer:userReducer,
+        renderListReducer: renderListReducer
     }
 })
 

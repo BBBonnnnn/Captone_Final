@@ -4,6 +4,9 @@ import { getProfileApi } from '../../redux/reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { DispatchType, RootState } from '../../redux/configStore'
 import ProfileModal2 from './profileModal2'
+import RenderList from './RenderList'
+
+
 
 type Props = {}
 
@@ -59,7 +62,7 @@ const Profile = (props: Props) => {
           
         </div>
         <div className='col-8'>
-
+          <RenderList />
         </div>
       </div>
     </div>

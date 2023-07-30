@@ -47,7 +47,7 @@ const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
 
             });
         }
-        console.log('Type of formState.skill:', typeof formState.skill);
+        //console.log("formState.skill formState.skill : ", formState.skill, typeof formState.skill)
     }, []);
 
 
@@ -238,15 +238,13 @@ const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
                             </div>
                             
                             <div className="mb-3">
-                                <label htmlFor="skill">Skills</label>
+                                <label >Skills</label>
                                 <input
                                     className="form-control"
                                     id="skill"
                                     name="skill"
                                     onChange={handleChange}
-                                    value={formState.skill.length == 0 
-                                        ? formState.skill 
-                                        :(formState.skill.length > 2 && Array.isArray(formState.skill)  ? formState.skill.join(',') : formState.skill[0])}
+                                    value={ Array.isArray(formState.skill)  ? formState.skill.join(',') : formState.skill}
                                 />
 
                             </div>
@@ -256,15 +254,13 @@ const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
 
 
                             <div className="mb-3">
-                                <label htmlFor="certification">certifications</label>
+                                <label >certifications</label>
                                 <input
                                     className="form-control"
                                     id="certification"
                                     name="certification"
                                     onChange={handleChange}
-                                    value={formState.certification.length == 0 
-                                        ? formState.certification :
-                                        (formState.certification.length > 2 && Array.isArray(formState.certification) ? formState.certification.join(',') : formState.certification[0])}
+                                    value={Array.isArray(formState.certification) ? formState.certification.join(',') : formState.certification}
                                 />
 
                             </div>
