@@ -29,6 +29,7 @@ const Header = (props: Props) => {
                     <span style={{ cursor: 'pointer' }} className="nav-link" onClick={() => {
                         //clear localstore,cookie => dispatch userLogin = {}
                         localStorage.removeItem(USER_LOGIN);
+                        localStorage.removeItem("userProfile");
                         //dispatch
                          let valueNull = {  } as UserLogin;
                          const action = loginAction(valueNull);

@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DispatchType, RootState } from '../../redux/configStore';
 import { SkinFilled } from '@ant-design/icons';
 import * as yup from 'yup';
-import { editProfile } from '../../redux/reducers/userReducer';
+import { UserProfile, editProfile } from '../../redux/reducers/userReducer';
+import { getStoreJson } from '../../util/22-06-2023-08-41-20-config (1)';
 
 type Props = {};
 
@@ -16,14 +17,13 @@ export interface ProfileForm {
     skill: string[];
     certification: string[];
 }
+interface UserProps {
+    userProfile: UserProfile | null
+}
+const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
 
-const ProfileModal2 = (props: Props) => {
-    const { userLogin, userProfile } = useSelector((state: RootState) => state.userReducer);
-
+    const { userLogin } = useSelector((state: RootState) => state.userReducer);
     const dispatch: DispatchType = useDispatch();
-
-
-
     const [formState, setFormState] = useState<ProfileForm>({
         email: userProfile?.email || '',
         name: userProfile?.name || '',
@@ -33,6 +33,25 @@ const ProfileModal2 = (props: Props) => {
         skill: userProfile?.skill || [],
         certification: userProfile?.certification || [],
     });
+    useEffect(() => {
+        const userProfileData = getStoreJson('userProfile');
+        if (userProfileData) {
+            setFormState({
+                email: userProfileData?.email || '',
+                name: userProfileData?.name || '',
+                phone: userProfileData?.phone ? String(userProfileData.phone) : '',
+                gender: userProfileData?.gender ? String(userProfileData.gender) : '',
+                birthday: userProfileData?.birthday || '',
+                skill: userProfileData?.skill || [],
+                certification: userProfileData?.certification || [],
+
+            });
+        }
+        console.log('Type of formState.skill:', typeof formState.skill);
+    }, []);
+
+
+
 
 
 
@@ -104,9 +123,11 @@ const ProfileModal2 = (props: Props) => {
 
         // Update the form state and errors state with the new values
         if (id == "skill" || id == "certification") {
+            const arrayValue = value.split(",");
+            //console.log("arrayValue: ", arrayValue);
             setFormState((prevFormState) => ({
                 ...prevFormState,
-                [id]: [value],
+                [id]: arrayValue,
             }));
         }
         else {
@@ -148,7 +169,7 @@ const ProfileModal2 = (props: Props) => {
 
 
     };
-
+    
     return (
         <div className="modal fade bd-example-modal-lg" id="modalId" tabIndex={-1} data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
             <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
@@ -215,6 +236,7 @@ const ProfileModal2 = (props: Props) => {
                                 </div>
                                 <p className='text text-danger'>{errors.gender}</p>
                             </div>
+                            
                             <div className="mb-3">
                                 <label htmlFor="skill">Skills</label>
                                 <input
@@ -222,21 +244,31 @@ const ProfileModal2 = (props: Props) => {
                                     id="skill"
                                     name="skill"
                                     onChange={handleChange}
-                                    value={formState.skill}
+                                    value={formState.skill.length == 0 
+                                        ? formState.skill 
+                                        :(formState.skill.length > 2 && Array.isArray(formState.skill)  ? formState.skill.join(',') : formState.skill[0])}
                                 />
 
                             </div>
 
+
+
+
+
                             <div className="mb-3">
-                                <label htmlFor="certification">Certification</label>
+                                <label htmlFor="certification">certifications</label>
                                 <input
                                     className="form-control"
                                     id="certification"
                                     name="certification"
                                     onChange={handleChange}
-                                    value={formState.certification}
+                                    value={formState.certification.length == 0 
+                                        ? formState.certification :
+                                        (formState.certification.length > 2 && Array.isArray(formState.certification) ? formState.certification.join(',') : formState.certification[0])}
                                 />
+
                             </div>
+
                             <button type="submit" className="btn btn-primary">
                                 Save Changes
                             </button>

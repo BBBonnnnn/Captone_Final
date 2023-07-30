@@ -48,7 +48,7 @@ interface UserState {
 
 const initialState : UserState = {
     userLogin: getStoreJson(USER_LOGIN),
-    userProfile: null
+    userProfile: getStoreJson("userProfile")
 }
 
 const userReducer = createSlice({
@@ -94,6 +94,7 @@ export const getProfileApi = (id:number) => {
     return async (dispatch: DispatchType) => {
         let res = await http.get(`/api/users/${id}`);
         if (res) {
+            setStoreJson("userProfile", res.data.content);
             const action : PayloadAction<UserProfile> = getProfileAction(res.data.content);
             dispatch(action);
         }
@@ -104,10 +105,14 @@ export const getProfileApi = (id:number) => {
 
 export const editProfile = (id:number, values:ProfileForm) =>{
     return async (dispatch: DispatchType) => {
-        console.log(values);
+        //console.log(values);
+
+
         let res = await http.put(`/api/users/${id}`, values );
-        console.log(res)
+        //console.log(res)
         if(res){
+            localStorage.removeItem("userProfile");
+            setStoreJson("userProfile", res.data.content);
             const action : PayloadAction<UserProfile> = getProfileAction(res.data.content);
             dispatch(action);
             alert('edit thanh cong')

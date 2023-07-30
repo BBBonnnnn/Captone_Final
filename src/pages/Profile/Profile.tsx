@@ -29,6 +29,8 @@ const Profile = (props: Props) => {
       return <p>Gender: Female</p>
     }
   }
+
+  
   return (
     <div className='container-fluid'>
       <div className='row'>
@@ -40,7 +42,7 @@ const Profile = (props: Props) => {
           <p>Birthday: {userProfile?.birthday}</p>
           {renderGender()}
           <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId">Launch</button>
-          <ProfileModal2/>
+          <ProfileModal2 userProfile = {userProfile}/>
           
           
       
