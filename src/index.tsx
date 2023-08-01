@@ -5,14 +5,17 @@ import { BrowserRouter, Routes, Route, unstable_HistoryRouter as HistoryRouter, 
 import { createBrowserHistory, BrowserHistory } from 'history';
 import Home from './pages/Home/Home';
 import HeaderAndFooter from './templates/HeaderAndFooter';
-import JobList from './pages/JobList/JobList';
+import JobDetail from './pages/JobDetail/JobDetail';
 import JobType from './pages/JobType/JobType';
-import DetailJob from './pages/DetailJob/DetailJob';
+import InFoJob from './pages/InFoJob/InFoJob';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import { Provider } from 'react-redux'
 import { store } from './redux/configStore';
 import './assets/scss/style.scss'
+import Search from './pages/Search.tsx/Search';
+import UserInfo from './pages/InFoUser/UserInfo';
+
 
 
 
@@ -25,11 +28,23 @@ root.render(
   <Provider store={store}>
     <HistoryRouter history={history}>
       <Routes>
+       
+        <Route  element={<HeaderAndFooter />}>
         <Route index element={<Home />}></Route>
-        <Route path='' element={<HeaderAndFooter />}>
-          <Route path='/joblist' element={<JobList />}></Route>
-          <Route path='/jobtype' element={<JobType />}></Route>
-          <Route path='/detailjob' element={<DetailJob />}></Route>
+          <Route path='/search'>
+            <Route path=':name' element={<Search />} ></Route>
+          </Route>
+          <Route path='/joblist'>
+            <Route path=':detailid' element={<JobDetail />} ></Route>
+          </Route>
+          <Route path='/jobtype'>
+            <Route path=':id' element={<JobType />} ></Route>
+
+          </Route>  
+          <Route path='/infojob'>
+            <Route path=':id' element={<InFoJob />} ></Route>
+          </Route>
+          <Route path='/infouser' element={<UserInfo />}></Route>
         </Route>
 
         <Route path='/login' element={<Login />}></Route>
