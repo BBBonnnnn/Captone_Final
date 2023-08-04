@@ -92,6 +92,9 @@ const Header = (props: Props) => {
                     <li className="nav-item mx-4">
                         <NavLink className="nav-link" to="/register">Become a seller</NavLink>
                     </li>
+                    <li className="nav-item mx-4">
+                        <NavLink className="nav-link" to="/useradmin">User Management</NavLink>
+                    </li>
                     {/* <li className="nav-item mx-4">
                         <NavLink className="nav-link" to="/login">{renderLogin()}</NavLink>
                     </li> */}

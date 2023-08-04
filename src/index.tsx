@@ -15,6 +15,10 @@ import { store } from './redux/configStore';
 import './assets/scss/style.scss'
 import Search from './pages/Search.tsx/Search';
 import UserInfo from './pages/InFoUser/UserInfo';
+import UserAdmin from './pages/Admin/UserAdmin';
+import JobAdmin from './pages/Admin/JobAdmin';
+import CategoryAdmin from './pages/Admin/CategoryAdmin';
+import ServiceAdmin from './pages/Admin/ServiceAdmin';
 
 
 
@@ -28,9 +32,9 @@ root.render(
   <Provider store={store}>
     <HistoryRouter history={history}>
       <Routes>
-       
-        <Route  element={<HeaderAndFooter />}>
-        <Route index element={<Home />}></Route>
+
+        <Route element={<HeaderAndFooter />}>
+          <Route index element={<Home />}></Route>
           <Route path='/search'>
             <Route path=':name' element={<Search />} ></Route>
           </Route>
@@ -40,15 +44,20 @@ root.render(
           <Route path='/jobtype'>
             <Route path=':id' element={<JobType />} ></Route>
 
-          </Route>  
+          </Route>
           <Route path='/infojob'>
             <Route path=':id' element={<InFoJob />} ></Route>
           </Route>
           <Route path='/infouser' element={<UserInfo />}></Route>
+          <Route path='/useradmin' element={<UserAdmin />}></Route>
+          <Route path='/jobadmin' element={<JobAdmin />}></Route>
+          <Route path='/categoryadmin' element={<CategoryAdmin />}></Route>
+          <Route path='/serviceadmin' element={<ServiceAdmin />}></Route>
         </Route>
 
         <Route path='/login' element={<Login />}></Route>
         <Route path='/register' element={<Register />}></Route>
+
         <Route path='*' element={<Navigate to="" />}></Route>
       </Routes>
 
