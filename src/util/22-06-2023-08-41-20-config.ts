@@ -89,7 +89,7 @@ http.interceptors.response.use((res) => {
     }
     if (err.response?.status === 403) {
         alert('Không đủ quyền truy cập vào trang này !');
-        history.push('/admin/login');
+
     }
     if (err.response?.status === 400) {
         alert('Request Failed Please do it again');

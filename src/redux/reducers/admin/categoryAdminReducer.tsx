@@ -15,10 +15,12 @@ export interface CategoryJobResponse {
 }
 
 interface categoryJobState {
-    categoryArray: CategoryJobResponse | null
+    categoryArray: CategoryJobResponse | null,
+    fullCategoryArray : CategoryJobInterface[] | []
 }
 const initialState:categoryJobState = {
-    categoryArray: null
+    categoryArray: null,
+    fullCategoryArray:[]
 }
 
 const categoryAdminReducer = createSlice({
@@ -34,11 +36,14 @@ const categoryAdminReducer = createSlice({
             data: action.payload.data,
         };
     
+    },
+    getFullCategoryArray :(state: categoryJobState, action: PayloadAction<CategoryJobInterface[]>) =>{
+        state.fullCategoryArray = action.payload
     }
   }
 });
 
-export const {getCategoryArray} = categoryAdminReducer.actions
+export const {getCategoryArray,getFullCategoryArray} = categoryAdminReducer.actions
 
 export default categoryAdminReducer.reducer
 
@@ -51,6 +56,20 @@ export const getCategoryArrayApi = (pageIndex: number, pageSize: number, keyword
             dispatch(action);
         } else {
             alert('Khong the lay dc danh sach Category Job');
+        }
+    }
+}
+
+
+export const getFullCategoryArrayApi = () => {
+    return async (dispatch: DispatchType) => {
+        let res = await http.get('/api/loai-cong-viec');
+        // console.log('res1: ', res)
+        if (res) {
+            const action: PayloadAction<CategoryJobInterface[]> = getFullCategoryArray(res.data.content);
+            dispatch(action);
+        } else {
+            alert('Khong the lay dc danh sach toan bo user');
         }
     }
 }

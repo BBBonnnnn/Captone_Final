@@ -2,23 +2,36 @@ import React, { useEffect }  from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom'
 import { RootState } from '../../redux/configStore';
-import { ServiceAdminInterface, getServiceArrayApi } from '../../redux/reducers/admin/serviceAdminReducer';
+import { ServiceAdminInterface, getFullServiceArrayApi, getServiceArrayApi } from '../../redux/reducers/admin/serviceAdminReducer';
+import { http } from '../../util/22-06-2023-08-41-20-config';
 
 type Props = {}
 
 const ServiceAdmin = (props: Props) => {
   const dispatch = useDispatch();
-  const { serviceArray } = useSelector((state: RootState) => state.serviceAdminReducer);
+  const { serviceArray,fullServiceArray } = useSelector((state: RootState) => state.serviceAdminReducer);
   const getServiceArray = async () => {
     const actionAsync: any = getServiceArrayApi(1, 10, '');
     dispatch(actionAsync);
   }
+  const getFullServiceArray = async () => {
+    const actionAsync: any = getFullServiceArrayApi();
+    dispatch(actionAsync);
+  }
   useEffect(() => {
-
+    
     getServiceArray()
-
+    getFullServiceArray()
 
   }, [])
+
+  useEffect(() => {
+    
+    const actionAsync: any = getServiceArrayApi(1, 10, '');
+    dispatch(actionAsync);
+
+
+  }, [fullServiceArray])
   const handlePaginationChange = (pageIndex: number) => {
     // Load data for the new page index
     const actionAsync: any = getServiceArrayApi(pageIndex, 10, '');
@@ -96,11 +109,20 @@ const ServiceAdmin = (props: Props) => {
                   <td>{prod?.maCongViec}</td>
                   <td>{prod?.maNguoiThue}</td>
                   <td>{prod?.ngayThue}</td>
-                  <td>{prod?.hoanThanh}</td>
+                  <td>{prod?.hoanThanh ? 'Đã  Hoàn Thành' : 'Chưa Hoàn Thành'}</td>
 
                   <td>
                     <button className="btn btn-primary">Edit</button>
-                    <button className="btn btn-danger">Delete</button>
+                    <button className="btn btn-danger" onClick={()=>{
+                      console.log(prod.id)
+                      let res:any = http.delete(`/api/thue-cong-viec/${prod.id}`);
+                      if(res){
+                        getFullServiceArray();
+                        alert('xoa thanh Cong')
+                      }else{
+                        alert('xoa that bai')
+                      }
+                    }}>Delete</button>
                   </td>
                 </tr>
               })}

@@ -26,10 +26,12 @@ export interface UserAdminResponse {
 }
 
 interface userAdminState {
-    userArray: UserAdminResponse | null;
+    userArray: UserAdminResponse | null,
+    fullUserArray : UserAdminData[] | []
 }
 const initialState: userAdminState = {
-    userArray: null
+    userArray: null,
+    fullUserArray: []
 }
 
 const userAdminReducer = createSlice({
@@ -46,12 +48,15 @@ const userAdminReducer = createSlice({
                 keywords: action.payload.keywords,
                 data: action.payload.data,
             };
+        },
+        getFullUserArray :(state: userAdminState, action: PayloadAction<UserAdminData[]>) =>{
+            state.fullUserArray = action.payload
         }
 
     }
 });
 
-export const { getUserArray } = userAdminReducer.actions
+export const { getUserArray, getFullUserArray } = userAdminReducer.actions
 
 export default userAdminReducer.reducer
 
@@ -67,6 +72,21 @@ export const getUserArrayApi = (pageIndex: number, pageSize: number, keywords: s
             dispatch(action);
         } else {
             alert('Khong the lay dc danh sach user');
+        }
+    }
+}
+
+
+
+export const getFullUserArrayApi = () => {
+    return async (dispatch: DispatchType) => {
+        let res = await http.get('/api/users');
+        // console.log('res1: ', res)
+        if (res) {
+            const action: PayloadAction<UserAdminData[]> = getFullUserArray(res.data.content);
+            dispatch(action);
+        } else {
+            alert('Khong the lay dc danh sach toan bo user');
         }
     }
 }

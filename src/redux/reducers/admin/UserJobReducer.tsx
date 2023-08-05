@@ -24,9 +24,11 @@ export interface UserJobResponse {
 
 interface userJobState {
     jobArray: UserJobResponse | null
+    fullJobArray:JobItemInterface[]|[]
 }
 const initialState: userJobState = {
-    jobArray: null
+    jobArray: null,
+    fullJobArray:[]
 }
 
 
@@ -43,11 +45,14 @@ const UserJobReducer = createSlice({
                 data: action.payload.data,
             };
             
+        },
+        getFullJobArray :(state: userJobState, action: PayloadAction<JobItemInterface[]>) =>{
+            state.fullJobArray = action.payload
         }
     }
 });
 
-export const { getJobArray } = UserJobReducer.actions
+export const { getJobArray,getFullJobArray } = UserJobReducer.actions
 
 export default UserJobReducer.reducer
 
@@ -61,6 +66,19 @@ export const getJobArrayApi = (pageIndex: number, pageSize: number, keywords: st
             dispatch(action);
         } else {
             alert('Khong the lay dc danh sach Job');
+        }
+    }
+}
+
+export const getFullJobArrayApi = () => {
+    return async (dispatch: DispatchType) => {
+        let res = await http.get('/api/cong-viec');
+        // console.log('res1: ', res)
+        if (res) {
+            const action: PayloadAction<JobItemInterface[]> = getFullJobArray(res.data.content);
+            dispatch(action);
+        } else {
+            alert('Khong the lay dc danh sach toan bo user');
         }
     }
 }

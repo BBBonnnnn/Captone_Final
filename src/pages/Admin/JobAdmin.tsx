@@ -2,7 +2,8 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom'
 import { RootState } from '../../redux/configStore';
-import { JobItemInterface, getJobArrayApi } from '../../redux/reducers/admin/UserJobReducer';
+import { JobItemInterface, getFullJobArrayApi, getJobArrayApi } from '../../redux/reducers/admin/UserJobReducer';
+import { http } from '../../util/22-06-2023-08-41-20-config';
 
 type Props = {}
 
@@ -13,12 +14,27 @@ const JobAdmin = (props: Props) => {
     const actionAsync: any = getJobArrayApi(1, 10, '');
     dispatch(actionAsync);
   }
+  const getFullJobArray = async () => {
+    const actionAsync: any = getFullJobArrayApi();
+    dispatch(actionAsync);
+  }
+
   useEffect(() => {
 
     getJobArray()
-
+    getFullJobArray()
 
   }, [])
+
+
+
+  // useEffect(() => {
+
+  //   getJobArray()
+
+
+  // }, [jobArray?.data])
+  
   const handlePaginationChange = (pageIndex: number) => {
     // Load data for the new page index
     const actionAsync: any = getJobArrayApi(pageIndex, 10, '');
@@ -101,7 +117,6 @@ const JobAdmin = (props: Props) => {
 
                   <td>
                     <button className="btn btn-primary">Edit</button>
-                    <button className="btn btn-danger">Delete</button>
                   </td>
                 </tr>
               })}

@@ -2,24 +2,35 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom'
 import { RootState } from '../../redux/configStore';
-import { CategoryJobInterface, getCategoryArrayApi } from '../../redux/reducers/admin/categoryAdminReducer';
+import { CategoryJobInterface, getCategoryArrayApi, getFullCategoryArrayApi } from '../../redux/reducers/admin/categoryAdminReducer';
+import { http } from '../../util/22-06-2023-08-41-20-config';
 
 type Props = {}
 
 const CategoryAdmin = (props: Props) => {
   const dispatch = useDispatch();
-  const { categoryArray } = useSelector((state: RootState) => state.categoryAdminReducer);
+  const { categoryArray, fullCategoryArray } = useSelector((state: RootState) => state.categoryAdminReducer);
   const getCategoryArray = async () => {
     const actionAsync: any = getCategoryArrayApi(1, 10, '');
+    dispatch(actionAsync);
+  }
+  const getFullCategoryArray = async () => {
+    const actionAsync: any = getFullCategoryArrayApi();
     dispatch(actionAsync);
   }
   useEffect(() => {
 
     getCategoryArray()
 
-
+    getFullCategoryArray()
   }, [])
+  useEffect(() => {
+    
+    const actionAsync: any = getCategoryArrayApi(1, 10, '');
+    dispatch(actionAsync);
 
+
+  }, [fullCategoryArray])
   const handlePaginationChange = (pageIndex: number) => {
     // Load data for the new page index
     const actionAsync: any = getCategoryArrayApi(pageIndex, 10, '');
@@ -97,7 +108,16 @@ const CategoryAdmin = (props: Props) => {
 
                   <td>
                     <button className="btn btn-primary">Edit</button>
-                    <button className="btn btn-danger">Delete</button>
+                    <button className="btn btn-danger" onClick={()=>{
+                      console.log(prod.id)
+                      let res:any = http.delete(`/api/loai-cong-viec/${prod.id}`);
+                      if(res){
+                        getFullCategoryArray();
+                        alert('xoa thanh Cong')
+                      }else{
+                        alert('xoa that bai')
+                      }
+                    }}>Delete</button>
                   </td>
                 </tr>
               })}

@@ -16,10 +16,12 @@ export interface ServiceAdminResponse {
     data: ServiceAdminInterface[];
 }
 interface ServiceAdminState {
-    serviceArray: ServiceAdminResponse | null
+    serviceArray: ServiceAdminResponse | null,
+    fullServiceArray:ServiceAdminInterface[]|[]
 }
 const initialState:ServiceAdminState = {
-    serviceArray:null
+    serviceArray:null,
+    fullServiceArray:[]
 }
 
 const serviceAdminReducer = createSlice({
@@ -35,11 +37,15 @@ const serviceAdminReducer = createSlice({
                 data: action.payload.data,
             };
             
+        },
+        getFullServiceArray :(state: ServiceAdminState, action: PayloadAction<ServiceAdminInterface[]>) =>{
+            state.fullServiceArray = action.payload
         }
+
     }
 });
 
-export const {getServiceArray } = serviceAdminReducer.actions
+export const {getServiceArray,getFullServiceArray } = serviceAdminReducer.actions
 
 export default serviceAdminReducer.reducer
 
@@ -52,6 +58,19 @@ export const getServiceArrayApi = (pageIndex: number, pageSize: number, keywords
             dispatch(action);
         } else {
             alert('Khong the lay dc danh sach Service');
+        }
+    }
+}
+
+export const getFullServiceArrayApi = () => {
+    return async (dispatch: DispatchType) => {
+        let res = await http.get('/api/thue-cong-viec');
+        // console.log('res1: ', res)
+        if (res) {
+            const action: PayloadAction<ServiceAdminInterface[]> = getFullServiceArray(res.data.content);
+            dispatch(action);
+        } else {
+            alert('Khong the lay dc danh sach toan bo user');
         }
     }
 }

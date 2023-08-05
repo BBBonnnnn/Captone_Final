@@ -2,24 +2,39 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { RootState } from '../../redux/configStore'
-import { UserAdminData, getUserArrayApi } from '../../redux/reducers/admin/userAdminReducer'
+import { UserAdminData, getFullUserArrayApi, getUserArrayApi } from '../../redux/reducers/admin/userAdminReducer'
+import { http } from '../../util/22-06-2023-08-41-20-config'
+import { history } from '../..'
 
 
 type Props = {}
 
 const UserAdmin = (props: Props) => {
   const dispatch = useDispatch();
-  const { userArray } = useSelector((state: RootState) => state.userAdminReducer);
+  const { userArray, fullUserArray } = useSelector((state: RootState) => state.userAdminReducer);
   const getUserArray = async () => {
     const actionAsync: any = getUserArrayApi(1, 10, '');
+    dispatch(actionAsync);
+  }
+
+  const getFullUserArray = async () => {
+    const actionAsync: any = getFullUserArrayApi();
     dispatch(actionAsync);
   }
   useEffect(() => {
 
     getUserArray()
-
+    getFullUserArray()
 
   }, [])
+
+  useEffect(() => {
+    
+    const actionAsync: any = getUserArrayApi(1, 10, '');
+    dispatch(actionAsync);
+
+
+  }, [fullUserArray])
 
   const handlePaginationChange = (pageIndex: number) => {
     // Load data for the new page index
@@ -104,12 +119,23 @@ const UserAdmin = (props: Props) => {
                   <td>{prod?.name}</td>
                   <td>{prod?.email}</td>
                   <td>{prod?.phone}</td>
-                  <td>{prod?.gender}</td>
+                  <td>{prod.gender ? 'male' : 'female'}</td>
                   <td>{prod?.birthday}</td>
 
                   <td>
-                    <button className="btn btn-primary">Edit</button>
-                    <button className="btn btn-danger">Delete</button>
+                    <button className="btn btn-primary" onClick={() => {
+                      console.log(prod.gender);
+                    }}>Edit</button>
+                    <button className="btn btn-danger" onClick={() => {
+                      console.log("Before:", fullUserArray.length)
+                      let res: any = http.delete(`/api/users?id=${prod.id}`);
+                      if (res) {
+                        getFullUserArray();
+                        alert('xoa thanh Cong')
+                      } else {
+                        alert('xoa that bai')
+                      }
+                    }}>Delete</button>
                   </td>
                 </tr>
               })}
