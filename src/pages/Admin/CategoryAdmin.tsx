@@ -1,21 +1,22 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom'
-import { RootState } from '../../redux/configStore';
+import { DispatchType, RootState } from '../../redux/configStore';
 import { CategoryJobInterface, getCategoryArrayApi, getFullCategoryArrayApi } from '../../redux/reducers/admin/categoryAdminReducer';
 import { http } from '../../util/22-06-2023-08-41-20-config';
+import CreateCategoryModal from './CreateModal/CreateCategoryModal';
 
 type Props = {}
 
 const CategoryAdmin = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch:DispatchType = useDispatch();
   const { categoryArray, fullCategoryArray } = useSelector((state: RootState) => state.categoryAdminReducer);
   const getCategoryArray = async () => {
-    const actionAsync: any = getCategoryArrayApi(1, 10, '');
+    const actionAsync = getCategoryArrayApi(1, 10, '');
     dispatch(actionAsync);
   }
   const getFullCategoryArray = async () => {
-    const actionAsync: any = getFullCategoryArrayApi();
+    const actionAsync = getFullCategoryArrayApi();
     dispatch(actionAsync);
   }
   useEffect(() => {
@@ -26,14 +27,17 @@ const CategoryAdmin = (props: Props) => {
   }, [])
   useEffect(() => {
     
-    const actionAsync: any = getCategoryArrayApi(1, 10, '');
+    const actionAsync = getCategoryArrayApi(1, 10, '');
     dispatch(actionAsync);
 
 
   }, [fullCategoryArray])
   const handlePaginationChange = (pageIndex: number) => {
     // Load data for the new page index
-    const actionAsync: any = getCategoryArrayApi(pageIndex, 10, '');
+    const searchBar = document.getElementsByName('searchBar')[0] as HTMLInputElement;
+    const searchKeyword = searchBar.value;
+    
+    const actionAsync = getCategoryArrayApi(pageIndex, 10, searchKeyword);
     dispatch(actionAsync);
   };
 
@@ -82,7 +86,7 @@ const CategoryAdmin = (props: Props) => {
     );
   };
   return (
-    <div className='container-fluid'>
+    <div className='container-fluid my-3'>
       <div className='row'>
         <div className='col-2'>
           <NavLink className="nav-link" to="/useradmin">User Management</NavLink>
@@ -91,6 +95,28 @@ const CategoryAdmin = (props: Props) => {
           <NavLink className="nav-link" to="/serviceadmin">Service Management</NavLink>
         </div>
         <div className='col-10'>
+        <div className='mb-3 d-flex justify-content-between'>
+            {/* Create button */}
+            <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#CreateCategoryModal">
+              Create
+            </button>
+
+            {/* Search bar */}
+            <div className='w-50'>
+              <input
+                type='text'
+                className='form-control mr-2'
+                placeholder='Search...'
+                name='searchBar'
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+
+                  const actionAsync = getCategoryArrayApi(1, 10, e.target.value);
+                  dispatch(actionAsync);
+                }}
+              />
+
+            </div>
+          </div>
           <table className="table table-bordered">
             <thead>
               <tr>
@@ -130,6 +156,7 @@ const CategoryAdmin = (props: Props) => {
           {renderPaginationButtons()}
         </div>
       </div>
+      <CreateCategoryModal/>
     </div>
   )
 }

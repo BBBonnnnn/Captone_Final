@@ -1,24 +1,25 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
-import { RootState } from '../../redux/configStore'
+import { DispatchType, RootState } from '../../redux/configStore'
 import { UserAdminData, getFullUserArrayApi, getUserArrayApi } from '../../redux/reducers/admin/userAdminReducer'
 import { http } from '../../util/22-06-2023-08-41-20-config'
 import { history } from '../..'
+import CreateUserModal from './CreateModal/CreateUserModal'
 
 
 type Props = {}
 
 const UserAdmin = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch:DispatchType = useDispatch();
   const { userArray, fullUserArray } = useSelector((state: RootState) => state.userAdminReducer);
   const getUserArray = async () => {
-    const actionAsync: any = getUserArrayApi(1, 10, '');
+    const actionAsync = getUserArrayApi(1, 10, '');
     dispatch(actionAsync);
   }
 
   const getFullUserArray = async () => {
-    const actionAsync: any = getFullUserArrayApi();
+    const actionAsync = getFullUserArrayApi();
     dispatch(actionAsync);
   }
   useEffect(() => {
@@ -29,8 +30,8 @@ const UserAdmin = (props: Props) => {
   }, [])
 
   useEffect(() => {
-    
-    const actionAsync: any = getUserArrayApi(1, 10, '');
+
+    const actionAsync = getUserArrayApi(1, 10, '');
     dispatch(actionAsync);
 
 
@@ -38,7 +39,10 @@ const UserAdmin = (props: Props) => {
 
   const handlePaginationChange = (pageIndex: number) => {
     // Load data for the new page index
-    const actionAsync: any = getUserArrayApi(pageIndex, 10, '');
+    const searchBar = document.getElementsByName('searchBar')[0] as HTMLInputElement;
+    const searchKeyword = searchBar.value;
+
+    const actionAsync = getUserArrayApi(pageIndex, 10, searchKeyword);
     dispatch(actionAsync);
   };
 
@@ -92,7 +96,7 @@ const UserAdmin = (props: Props) => {
 
 
   return (
-    <div className='container-fluid'>
+    <div className='container-fluid my-3'>
       <div className='row'>
         <div className='col-2'>
           <NavLink className="nav-link" to="/useradmin">User Management</NavLink>
@@ -101,7 +105,27 @@ const UserAdmin = (props: Props) => {
           <NavLink className="nav-link" to="/serviceadmin">Service Management</NavLink>
         </div>
         <div className='col-10'>
+          <div className='mb-3 d-flex justify-content-between'>
+            {/* Create button */}
+            <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#CreateUserModal">
+              Create
+            </button>
+            {/* Search bar */}
+            <div className='w-50'>
+              <input
+                type='text'
+                className='form-control mr-2'
+                placeholder='Search...'
+                name='searchBar'
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 
+                  const actionAsync = getUserArrayApi(1, 10, e.target.value);
+                  dispatch(actionAsync);
+                }}
+              />
+
+            </div>
+          </div>
           <table className='table table-bordered'>
             <thead>
               <tr>
@@ -150,6 +174,7 @@ const UserAdmin = (props: Props) => {
 
         </div>
       </div>
+      <CreateUserModal/>
     </div>
   );
 }

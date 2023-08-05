@@ -1,6 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { DispatchType } from '../../configStore';
 import { http } from '../../../util/22-06-2023-08-41-20-config';
+import { CategoryAdminForm } from '../../../pages/Admin/CreateModal/CreateCategoryModal';
+import { history } from '../../..';
 export interface CategoryJobInterface {
     id: number;
     tenLoaiCongViec:string;
@@ -47,9 +49,9 @@ export const {getCategoryArray,getFullCategoryArray} = categoryAdminReducer.acti
 
 export default categoryAdminReducer.reducer
 
-export const getCategoryArrayApi = (pageIndex: number, pageSize: number, keywords: string) => {
+export const getCategoryArrayApi = (pageIndex: number, pageSize: number, keyword: string) => {
     return async (dispatch: DispatchType) => {
-        let res = await http.get('/api/loai-cong-viec/phan-trang-tim-kiem', { params: { pageIndex, pageSize, keywords } });
+        let res = await http.get('/api/loai-cong-viec/phan-trang-tim-kiem', { params: { pageIndex, pageSize, keyword } });
         //console.log('res1: ', res)
         if (res) {
             const action: PayloadAction<CategoryJobResponse> = getCategoryArray(res.data.content);
@@ -70,6 +72,19 @@ export const getFullCategoryArrayApi = () => {
             dispatch(action);
         } else {
             alert('Khong the lay dc danh sach toan bo user');
+        }
+    }
+}
+
+
+export const CreateCategoryAdminApi = (JobCreateAdmin: CategoryAdminForm) => {
+    return async (dispatch: DispatchType) => {
+        let res = await http.post('/api/loai-cong-viec', JobCreateAdmin);
+        if (res) {
+            alert('successful registration');
+            history.push('/categoryadmin');
+        } else {
+            alert('Please check your Input again');
         }
     }
 }

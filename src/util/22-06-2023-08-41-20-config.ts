@@ -53,6 +53,7 @@ http.interceptors.request.use((config: any) => {
     let token = getStoreJson(USER_LOGIN)?.token;
     config.headers.token = `${token}`;
     config.headers.tokenCybersoft = `${tokenCybersoft}`;
+    
     return config
 }, err => {
     return Promise.reject(err)

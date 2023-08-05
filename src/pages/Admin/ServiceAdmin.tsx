@@ -1,39 +1,42 @@
-import React, { useEffect }  from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom'
-import { RootState } from '../../redux/configStore';
+import { DispatchType, RootState } from '../../redux/configStore';
 import { ServiceAdminInterface, getFullServiceArrayApi, getServiceArrayApi } from '../../redux/reducers/admin/serviceAdminReducer';
 import { http } from '../../util/22-06-2023-08-41-20-config';
+import CreateServiceModal from './CreateModal/CreateServiceModal';
+import EditServiceAdmin from './EditModal/EditServiceAdmin';
 
 type Props = {}
 
 const ServiceAdmin = (props: Props) => {
-  const dispatch = useDispatch();
-  const { serviceArray,fullServiceArray } = useSelector((state: RootState) => state.serviceAdminReducer);
+  const dispatch: DispatchType = useDispatch();
+  const { serviceArray, fullServiceArray } = useSelector((state: RootState) => state.serviceAdminReducer);
   const getServiceArray = async () => {
-    const actionAsync: any = getServiceArrayApi(1, 10, '');
+    const actionAsync = getServiceArrayApi(1, 10, '');
     dispatch(actionAsync);
   }
   const getFullServiceArray = async () => {
-    const actionAsync: any = getFullServiceArrayApi();
+    const actionAsync = getFullServiceArrayApi();
     dispatch(actionAsync);
   }
   useEffect(() => {
-    
+
     getServiceArray()
     getFullServiceArray()
 
   }, [])
 
   useEffect(() => {
-    
-    const actionAsync: any = getServiceArrayApi(1, 10, '');
+
+    const actionAsync = getServiceArrayApi(1, 10, '');
     dispatch(actionAsync);
 
 
   }, [fullServiceArray])
   const handlePaginationChange = (pageIndex: number) => {
     // Load data for the new page index
+
     const actionAsync: any = getServiceArrayApi(pageIndex, 10, '');
     dispatch(actionAsync);
   };
@@ -82,18 +85,26 @@ const ServiceAdmin = (props: Props) => {
       </nav>
     );
   };
-  
+
   return (
-    <div className='container-fluid'>
-        <div className='row'>
-            <div className='col-2'>
-                <NavLink className="nav-link" to="/useradmin">User Management</NavLink>
-                <NavLink className="nav-link" to="/jobadmin">Job Management</NavLink>
-                <NavLink className="nav-link" to="/categoryadmin">Job Category Management</NavLink>
-                <NavLink className="nav-link" to="/serviceadmin">Service Management</NavLink>
-            </div>
-            <div className='col-10'>
-            <table className="table table-bordered">
+    <div className='container-fluid my-3'>
+      <div className='row'>
+        <div className='col-2'>
+          <NavLink className="nav-link" to="/useradmin">User Management</NavLink>
+          <NavLink className="nav-link" to="/jobadmin">Job Management</NavLink>
+          <NavLink className="nav-link" to="/categoryadmin">Job Category Management</NavLink>
+          <NavLink className="nav-link" to="/serviceadmin">Service Management</NavLink>
+        </div>
+        <div className='col-10'>
+          <div className='mb-3 d-flex justify-content-between'>
+            {/* Create button */}
+            <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#CreateServiceModal">
+              Create
+            </button>
+            
+
+          </div>
+          <table className="table table-bordered">
             <thead>
               <tr>
                 <th>maCongViec</th>
@@ -104,7 +115,7 @@ const ServiceAdmin = (props: Props) => {
               </tr>
             </thead>
             <tbody>
-            {serviceArray?.data.map((prod: ServiceAdminInterface, index: number) => {
+              {serviceArray?.data.map((prod: ServiceAdminInterface, index: number) => {
                 return <tr>
                   <td>{prod?.maCongViec}</td>
                   <td>{prod?.maNguoiThue}</td>
@@ -112,29 +123,37 @@ const ServiceAdmin = (props: Props) => {
                   <td>{prod?.hoanThanh ? 'Đã  Hoàn Thành' : 'Chưa Hoàn Thành'}</td>
 
                   <td>
-                    <button className="btn btn-primary">Edit</button>
-                    <button className="btn btn-danger" onClick={()=>{
+                  <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target={`#EditServiceModal${prod.id}`}>
+                      Launch
+                    </button>
+                    <EditServiceAdmin id={prod.id}/>
+                    <button className="btn btn-danger" onClick={() => {
                       console.log(prod.id)
-                      let res:any = http.delete(`/api/thue-cong-viec/${prod.id}`);
-                      if(res){
+                      let res: any = http.delete(`/api/thue-cong-viec/${prod.id}`);
+                      if (res) {
                         getFullServiceArray();
                         alert('xoa thanh Cong')
-                      }else{
+                      } else {
                         alert('xoa that bai')
                       }
                     }}>Delete</button>
                   </td>
+                  
                 </tr>
+
               })}
 
-             
 
-              
+
+
             </tbody>
           </table>
           {renderPaginationButtons()}
-            </div>
         </div>
+      </div>
+      
+      <CreateServiceModal />
+
     </div>
   )
 }

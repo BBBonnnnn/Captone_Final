@@ -1,6 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { DispatchType } from '../../configStore';
 import { http } from '../../../util/22-06-2023-08-41-20-config';
+import { ServiceAdminForm } from '../../../pages/Admin/CreateModal/CreateServiceModal';
+import { history } from '../../..';
 export interface ServiceAdminInterface {
     id: number;
     maCongViec: number;
@@ -49,9 +51,9 @@ export const {getServiceArray,getFullServiceArray } = serviceAdminReducer.action
 
 export default serviceAdminReducer.reducer
 
-export const getServiceArrayApi = (pageIndex: number, pageSize: number, keywords: string) => {
+export const getServiceArrayApi = (pageIndex: number, pageSize: number, keyword: string) => {
     return async (dispatch: DispatchType) => {
-        let res = await http.get('/api/thue-cong-viec/phan-trang-tim-kiem', { params: { pageIndex, pageSize, keywords } });
+        let res = await http.get('/api/thue-cong-viec/phan-trang-tim-kiem', { params: { pageIndex, pageSize, keyword } });
         //console.log('res1: ', res)
         if (res) {
             const action: PayloadAction<ServiceAdminResponse> = getServiceArray(res.data.content);
@@ -71,6 +73,19 @@ export const getFullServiceArrayApi = () => {
             dispatch(action);
         } else {
             alert('Khong the lay dc danh sach toan bo user');
+        }
+    }
+}
+
+export const CreateServiceAdminApi = (ServiceCreateAdmin: ServiceAdminForm) => {
+    return async (dispatch: DispatchType) => {
+        let res = await http.post('/api/thue-cong-viec', ServiceCreateAdmin);
+        if (res) {
+            alert('successful registration');
+
+            history.push('/serviceadmin');
+        } else {
+            alert('Please check your Input again');
         }
     }
 }

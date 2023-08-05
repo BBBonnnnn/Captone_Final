@@ -1,6 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { DispatchType } from '../../configStore';
 import { http } from '../../../util/22-06-2023-08-41-20-config';
+import { JobAdminCreateForm } from '../../../pages/Admin/CreateModal/CreateJobModal';
+import { history } from '../../..';
 export interface JobItemInterface {
     id: number;
     tenCongViec: string;
@@ -57,9 +59,9 @@ export const { getJobArray,getFullJobArray } = UserJobReducer.actions
 export default UserJobReducer.reducer
 
 
-export const getJobArrayApi = (pageIndex: number, pageSize: number, keywords: string) => {
+export const getJobArrayApi = (pageIndex: number, pageSize: number, keyword: string) => {
     return async (dispatch: DispatchType) => {
-        let res = await http.get('/api/cong-viec/phan-trang-tim-kiem', { params: { pageIndex, pageSize, keywords } });
+        let res = await http.get('/api/cong-viec/phan-trang-tim-kiem', { params: { pageIndex, pageSize, keyword } });
         //console.log('res1: ', res)
         if (res) {
             const action: PayloadAction<UserJobResponse> = getJobArray(res.data.content);
@@ -79,6 +81,19 @@ export const getFullJobArrayApi = () => {
             dispatch(action);
         } else {
             alert('Khong the lay dc danh sach toan bo user');
+        }
+    }
+}
+
+export const CreateJobAdminApi = (JobCreateAdmin: JobAdminCreateForm) => {
+    return async (dispatch: DispatchType) => {
+        let res = await http.post('/api/cong-viec', JobCreateAdmin);
+        if (res) {
+            alert('successful registration');
+
+            history.push('/jobadmin');
+        } else {
+            alert('Please check your Input again');
         }
     }
 }

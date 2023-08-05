@@ -1,21 +1,22 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom'
-import { RootState } from '../../redux/configStore';
+import { DispatchType, RootState } from '../../redux/configStore';
 import { JobItemInterface, getFullJobArrayApi, getJobArrayApi } from '../../redux/reducers/admin/UserJobReducer';
 import { http } from '../../util/22-06-2023-08-41-20-config';
+import CreateJobModal from './CreateModal/CreateJobModal';
 
 type Props = {}
 
 const JobAdmin = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch:DispatchType = useDispatch();
   const { jobArray } = useSelector((state: RootState) => state.UserJobReducer);
   const getJobArray = async () => {
-    const actionAsync: any = getJobArrayApi(1, 10, '');
+    const actionAsync = getJobArrayApi(1, 10, '');
     dispatch(actionAsync);
   }
   const getFullJobArray = async () => {
-    const actionAsync: any = getFullJobArrayApi();
+    const actionAsync = getFullJobArrayApi();
     dispatch(actionAsync);
   }
 
@@ -28,16 +29,13 @@ const JobAdmin = (props: Props) => {
 
 
 
-  // useEffect(() => {
-
-  //   getJobArray()
-
-
-  // }, [jobArray?.data])
+  
   
   const handlePaginationChange = (pageIndex: number) => {
     // Load data for the new page index
-    const actionAsync: any = getJobArrayApi(pageIndex, 10, '');
+    const searchBar = document.getElementsByName('searchBar')[0] as HTMLInputElement;
+    const searchKeyword = searchBar.value;
+    const actionAsync = getJobArrayApi(pageIndex, 10, searchKeyword);
     dispatch(actionAsync);
   };
 
@@ -86,7 +84,7 @@ const JobAdmin = (props: Props) => {
     );
   };
   return (
-    <div className='container-fluid'>
+    <div className='container-fluid my-3'>
       <div className='row'>
         <div className='col-2'>
           <NavLink className="nav-link" to="/useradmin">User Management</NavLink>
@@ -95,6 +93,27 @@ const JobAdmin = (props: Props) => {
           <NavLink className="nav-link" to="/serviceadmin">Service Management</NavLink>
         </div>
         <div className='col-10'>
+        <div className='mb-3 d-flex justify-content-between'>
+            {/* Create button */}
+            <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#CreateJobModal">
+              Create
+            </button>
+            {/* Search bar */}
+            <div className='w-50'>
+              <input
+                type='text'
+                className='form-control mr-2'
+                placeholder='Search...'
+                name='searchBar'
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+
+                  const actionAsync = getJobArrayApi(1, 10, e.target.value);
+                  dispatch(actionAsync);
+                }}
+              />
+
+            </div>
+          </div>
           <table className="table table-bordered">
             <thead>
               <tr>
@@ -129,6 +148,7 @@ const JobAdmin = (props: Props) => {
           {renderPaginationButtons()}
         </div>
       </div>
+      <CreateJobModal/>
     </div>
   )
 }

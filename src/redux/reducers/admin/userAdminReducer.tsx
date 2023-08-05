@@ -2,6 +2,8 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { http } from '../../../util/22-06-2023-08-41-20-config';
 import { DispatchType } from '../../configStore';
 import { wait } from '@testing-library/user-event/dist/utils';
+import { UserAdminCreateForm } from '../../../pages/Admin/CreateModal/CreateUserModal';
+import { history } from '../../..';
 export interface UserAdminData {
     id: number;
     name: string;
@@ -21,13 +23,13 @@ export interface UserAdminResponse {
     pageIndex: number;
     pageSize: number;
     totalRow: number;
-    keywords: null | string;
+    keywords: string;
     data: UserAdminData[];
 }
 
 interface userAdminState {
     userArray: UserAdminResponse | null,
-    fullUserArray : UserAdminData[] | []
+    fullUserArray: UserAdminData[] | []
 }
 const initialState: userAdminState = {
     userArray: null,
@@ -39,17 +41,18 @@ const userAdminReducer = createSlice({
     initialState,
     reducers: {
         getUserArray: (state: userAdminState, action: PayloadAction<UserAdminResponse>) => {
-            
+
             state.userArray = {
-                
+
                 pageIndex: action.payload.pageIndex,
                 pageSize: action.payload.pageSize,
                 totalRow: action.payload.totalRow,
                 keywords: action.payload.keywords,
                 data: action.payload.data,
             };
+
         },
-        getFullUserArray :(state: userAdminState, action: PayloadAction<UserAdminData[]>) =>{
+        getFullUserArray: (state: userAdminState, action: PayloadAction<UserAdminData[]>) => {
             state.fullUserArray = action.payload
         }
 
@@ -63,16 +66,19 @@ export default userAdminReducer.reducer
 
 
 
-export const getUserArrayApi = (pageIndex: number, pageSize: number, keywords: string) => {
+export const getUserArrayApi = (pageIndex: number, pageSize: number, keyword: string) => {
     return async (dispatch: DispatchType) => {
-        let res = await http.get('/api/users/phan-trang-tim-kiem', { params: { pageIndex, pageSize, keywords } });
-        // console.log('res1: ', res)
+
+        let res = await http.get('/api/users/phan-trang-tim-kiem', { params: { pageIndex, pageSize, keyword } });
+
         if (res) {
             const action: PayloadAction<UserAdminResponse> = getUserArray(res.data.content);
             dispatch(action);
         } else {
             alert('Khong the lay dc danh sach user');
         }
+
+
     }
 }
 
@@ -87,6 +93,19 @@ export const getFullUserArrayApi = () => {
             dispatch(action);
         } else {
             alert('Khong the lay dc danh sach toan bo user');
+        }
+    }
+}
+
+export const CreateUserAdminApi = (UserCreateAdmin: UserAdminCreateForm) => {
+    return async (dispatch: DispatchType) => {
+        let res = await http.post('/api/users', UserCreateAdmin);
+        if (res) {
+            alert('successful registration');
+
+            history.push('/useradmin');
+        } else {
+            alert('Please check your Input again');
         }
     }
 }
