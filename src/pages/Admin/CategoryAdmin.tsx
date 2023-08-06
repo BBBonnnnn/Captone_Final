@@ -5,6 +5,7 @@ import { DispatchType, RootState } from '../../redux/configStore';
 import { CategoryJobInterface, getCategoryArrayApi, getFullCategoryArrayApi } from '../../redux/reducers/admin/categoryAdminReducer';
 import { http } from '../../util/22-06-2023-08-41-20-config';
 import CreateCategoryModal from './CreateModal/CreateCategoryModal';
+import EditCategoryAdmin from './EditModal/EditCategoryAdmin';
 
 type Props = {}
 
@@ -133,9 +134,12 @@ const CategoryAdmin = (props: Props) => {
 
 
                   <td>
-                    <button className="btn btn-primary">Edit</button>
+                  <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target={`#EditServiceModal${prod.id}`}>
+                      Edit
+                    </button>
+                    <EditCategoryAdmin prod={prod}/>
                     <button className="btn btn-danger" onClick={()=>{
-                      console.log(prod.id)
+                      
                       let res:any = http.delete(`/api/loai-cong-viec/${prod.id}`);
                       if(res){
                         getFullCategoryArray();

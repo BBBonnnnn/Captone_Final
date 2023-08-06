@@ -37,7 +37,7 @@ const CreateServiceModal = (props: Props) => {
             maCongViec: 0,
             maNguoiThue: 0,
             ngayThue: '',
-            hoanThanh: false,
+            hoanThanh: true,
         },
         validationSchema: yup.object().shape({
             maCongViec: yup.number().required('Job ID can not be blank!').min(0, 'Invalid Job ID'),
@@ -86,9 +86,9 @@ const CreateServiceModal = (props: Props) => {
                                 <div className="col-6">
                                     <div className="form-group">
                                         <p>Customer ID</p>
-                                        
 
-<select
+
+                                        <select
                                             className="form-control"
                                             id="maNguoiThue"
                                             name="maNguoiThue"

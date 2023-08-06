@@ -18,11 +18,13 @@ export interface CategoryJobResponse {
 
 interface categoryJobState {
     categoryArray: CategoryJobResponse | null,
-    fullCategoryArray : CategoryJobInterface[] | []
+    fullCategoryArray : CategoryJobInterface[] | [],
+    EditCategory:CategoryJobInterface | null
 }
 const initialState:categoryJobState = {
     categoryArray: null,
-    fullCategoryArray:[]
+    fullCategoryArray:[],
+    EditCategory:null
 }
 
 const categoryAdminReducer = createSlice({
@@ -41,11 +43,14 @@ const categoryAdminReducer = createSlice({
     },
     getFullCategoryArray :(state: categoryJobState, action: PayloadAction<CategoryJobInterface[]>) =>{
         state.fullCategoryArray = action.payload
+    },
+    getEditCategory  :(state: categoryJobState, action: PayloadAction<CategoryJobInterface>) =>{
+        state.EditCategory = action.payload
     }
   }
 });
 
-export const {getCategoryArray,getFullCategoryArray} = categoryAdminReducer.actions
+export const {getCategoryArray,getFullCategoryArray,getEditCategory} = categoryAdminReducer.actions
 
 export default categoryAdminReducer.reducer
 
@@ -86,5 +91,20 @@ export const CreateCategoryAdminApi = (JobCreateAdmin: CategoryAdminForm) => {
         } else {
             alert('Please check your Input again');
         }
+    }
+}
+
+export const getEditCategoryApi = (id : number) =>{
+    return async (dispatch: DispatchType) => {
+        let res = await http.get(`/api/loai-cong-viec/${id}`);
+        
+        if (res) {
+            const action : PayloadAction<CategoryJobInterface> = getEditCategory(res.data.content);
+            dispatch(action);
+        }else{
+            alert('cannot get profile')
+        }
+
+
     }
 }

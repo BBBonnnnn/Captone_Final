@@ -101,7 +101,7 @@ const ServiceAdmin = (props: Props) => {
             <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#CreateServiceModal">
               Create
             </button>
-            
+
 
           </div>
           <table className="table table-bordered">
@@ -123,10 +123,14 @@ const ServiceAdmin = (props: Props) => {
                   <td>{prod?.hoanThanh ? 'Đã  Hoàn Thành' : 'Chưa Hoàn Thành'}</td>
 
                   <td>
-                  <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target={`#EditServiceModal${prod.id}`}>
-                      Launch
+                    <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target={`#EditServiceModal${prod.id}`}>
+                      Edit
                     </button>
-                    <EditServiceAdmin id={prod.id}/>
+                    <EditServiceAdmin id={prod.id}
+                      maCongViec={prod.maCongViec}
+                      maNguoiThue={prod.maNguoiThue}
+                      ngayThue={prod.ngayThue}
+                      hoanThanh={prod.hoanThanh} />
                     <button className="btn btn-danger" onClick={() => {
                       console.log(prod.id)
                       let res: any = http.delete(`/api/thue-cong-viec/${prod.id}`);
@@ -138,7 +142,7 @@ const ServiceAdmin = (props: Props) => {
                       }
                     }}>Delete</button>
                   </td>
-                  
+
                 </tr>
 
               })}
@@ -151,7 +155,7 @@ const ServiceAdmin = (props: Props) => {
           {renderPaginationButtons()}
         </div>
       </div>
-      
+
       <CreateServiceModal />
 
     </div>
