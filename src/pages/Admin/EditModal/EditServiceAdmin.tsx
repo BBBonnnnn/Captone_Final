@@ -8,14 +8,10 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { ServiceAdminForm } from '../CreateModal/CreateServiceModal';
 type Props = {
-    id: number;
-    maCongViec: number;
-    maNguoiThue: number;
-    ngayThue: string;
-    hoanThanh: boolean;
-
+    prod: ServiceAdminInterface,
+    
 }
-const EditServiceAdmin = ({ id,maCongViec,maNguoiThue,ngayThue,hoanThanh }: Props) => {
+const EditServiceAdmin = ({ prod  }: Props) => {
     const dispatch: DispatchType = useDispatch();
     const { fullJobArray } = useSelector((state: RootState) => state.UserJobReducer);
     const { fullUserArray } = useSelector((state: RootState) => state.userAdminReducer);
@@ -28,7 +24,7 @@ const EditServiceAdmin = ({ id,maCongViec,maNguoiThue,ngayThue,hoanThanh }: Prop
         const actionAsync2 = getFullUserArrayApi();
         dispatch(actionAsync2);
 
-    }, [])
+    }, [prod.id])
     const formatDate = (dateString: string) => {
         if (!dateString) {
             return '';
@@ -40,10 +36,10 @@ const EditServiceAdmin = ({ id,maCongViec,maNguoiThue,ngayThue,hoanThanh }: Prop
 
     const frm = useFormik<ServiceAdminForm>({
         initialValues: {
-            maCongViec: maCongViec,
-            maNguoiThue: maNguoiThue,
-            ngayThue: formatDate(ngayThue),
-            hoanThanh: hoanThanh,
+            maCongViec: prod.maCongViec,
+            maNguoiThue: prod.maNguoiThue,
+            ngayThue: formatDate(prod.ngayThue),
+            hoanThanh: prod.hoanThanh,
         },
         validationSchema: yup.object().shape({
             maCongViec: yup.number().required('Job ID can not be blank!').min(0, 'Invalid Job ID'),
@@ -62,7 +58,7 @@ const EditServiceAdmin = ({ id,maCongViec,maNguoiThue,ngayThue,hoanThanh }: Prop
 
 
 
-        <div className="modal fade" id={`EditServiceModal${id}`} tabIndex={-1} data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div className="modal fade" id={`EditServiceModal${prod.id}`} tabIndex={-1} data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
             <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
