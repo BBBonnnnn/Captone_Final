@@ -134,7 +134,7 @@ const CategoryAdmin = (props: Props) => {
 
 
                   <td>
-                  <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target={`#EditServiceModal${prod.id}`}>
+                  <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target={`#EditCategoryModal${prod.id}`}>
                       Edit
                     </button>
                     <EditCategoryAdmin prod={prod}/>

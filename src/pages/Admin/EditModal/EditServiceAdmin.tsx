@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { DispatchType, RootState } from '../../../redux/configStore';
 import { useDispatch, useSelector } from 'react-redux';
-import { ServiceAdminInterface } from '../../../redux/reducers/admin/serviceAdminReducer';
+import { ServiceAdminInterface, postEditServiceApi } from '../../../redux/reducers/admin/serviceAdminReducer';
 import { JobItemInterface, getFullJobArrayApi } from '../../../redux/reducers/admin/UserJobReducer';
 import { UserAdminData, getFullUserArrayApi } from '../../../redux/reducers/admin/userAdminReducer';
 import { useFormik } from 'formik';
@@ -33,7 +33,13 @@ const EditServiceAdmin = ({ prod  }: Props) => {
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     };
 
-
+    const reformatDate = (dateString: string) => {
+        if (!dateString) {
+          return '';
+        }
+        const [year, month, day] = dateString.split('-');
+        return `${day}/${month}/${year}`;
+      };
     const frm = useFormik<ServiceAdminForm>({
         initialValues: {
             maCongViec: prod.maCongViec,
@@ -48,10 +54,28 @@ const EditServiceAdmin = ({ prod  }: Props) => {
             hoanThanh: yup.boolean().required('Completion status can not be blank!'),
         }),
         onSubmit: async (values: ServiceAdminForm) => {
-
-            console.log(values)
+            const reformateNgayThue = reformatDate(values.ngayThue);
+            const finaleValues = {...values, ngaythue: reformateNgayThue}
+            const actionAsync = postEditServiceApi(finaleValues,prod.id);
+            await dispatch(actionAsync);
+            await closeModalAndReloadPage();
         },
     });
+
+    const closeModalAndReloadPage = async () => {
+        // Close the modal
+        const modal = document.getElementById(`EditServiceModal${prod.id}`);
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modal) {
+          modal.style.display = 'none';
+        }
+        if (modalBackdrop) {
+          modalBackdrop.remove();
+        }
+
+        // Reload the page
+        window.location.reload();
+      };
     return (
 
 

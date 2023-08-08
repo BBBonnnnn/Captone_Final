@@ -89,3 +89,18 @@ export const CreateServiceAdminApi = (ServiceCreateAdmin: ServiceAdminForm) => {
         }
     }
 }
+
+
+export const postEditServiceApi = (serviceAdminForm : ServiceAdminForm, id:number) =>{
+    return async (dispatch: DispatchType) => {
+        let res = await http.put(`/api/thue-cong-viec/${id}`,serviceAdminForm );
+        
+        if (res) {
+            alert('Edit success')
+        }else{
+            alert('cannot Edit')
+        }
+
+
+    }
+}

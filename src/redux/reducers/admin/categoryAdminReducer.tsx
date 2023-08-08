@@ -19,12 +19,12 @@ export interface CategoryJobResponse {
 interface categoryJobState {
     categoryArray: CategoryJobResponse | null,
     fullCategoryArray : CategoryJobInterface[] | [],
-    EditCategory:CategoryJobInterface | null
+
 }
 const initialState:categoryJobState = {
     categoryArray: null,
     fullCategoryArray:[],
-    EditCategory:null
+
 }
 
 const categoryAdminReducer = createSlice({
@@ -43,14 +43,11 @@ const categoryAdminReducer = createSlice({
     },
     getFullCategoryArray :(state: categoryJobState, action: PayloadAction<CategoryJobInterface[]>) =>{
         state.fullCategoryArray = action.payload
-    },
-    getEditCategory  :(state: categoryJobState, action: PayloadAction<CategoryJobInterface>) =>{
-        state.EditCategory = action.payload
     }
   }
 });
 
-export const {getCategoryArray,getFullCategoryArray,getEditCategory} = categoryAdminReducer.actions
+export const {getCategoryArray,getFullCategoryArray} = categoryAdminReducer.actions
 
 export default categoryAdminReducer.reducer
 
@@ -94,15 +91,16 @@ export const CreateCategoryAdminApi = (JobCreateAdmin: CategoryAdminForm) => {
     }
 }
 
-export const getEditCategoryApi = (id : number) =>{
+export const postEditCategoryApi = (categoryadminForm : CategoryAdminForm, id:number) =>{
     return async (dispatch: DispatchType) => {
-        let res = await http.get(`/api/loai-cong-viec/${id}`);
+        let res = await http.put(`/api/loai-cong-viec/${id}`,categoryadminForm );
         
         if (res) {
-            const action : PayloadAction<CategoryJobInterface> = getEditCategory(res.data.content);
-            dispatch(action);
+            alert('Edit success')
+            history.push('/categoryadmin')
         }else{
-            alert('cannot get profile')
+            alert('cannot Edit')
+            history.push('/categoryadmin')
         }
 
 

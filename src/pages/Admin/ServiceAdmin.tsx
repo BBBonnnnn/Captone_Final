@@ -101,12 +101,13 @@ const ServiceAdmin = (props: Props) => {
             <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#CreateServiceModal">
               Create
             </button>
-            
+
 
           </div>
           <table className="table table-bordered">
             <thead>
               <tr>
+                <th>prod.id</th>
                 <th>maCongViec</th>
                 <th>maNguoiThue</th>
                 <th>ngayThue</th>
@@ -116,17 +117,18 @@ const ServiceAdmin = (props: Props) => {
             </thead>
             <tbody>
               {serviceArray?.data.map((prod: ServiceAdminInterface, index: number) => {
-                return <tr>
+                return <tr key={prod.id}>
+                  <th>{prod?.id}</th>
                   <td>{prod?.maCongViec}</td>
                   <td>{prod?.maNguoiThue}</td>
                   <td>{prod?.ngayThue}</td>
                   <td>{prod?.hoanThanh ? 'Đã  Hoàn Thành' : 'Chưa Hoàn Thành'}</td>
 
                   <td>
-                  <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target={`#EditServiceModal${prod.id}`}>
+                    <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target={`#EditServiceModal${prod.id}`}>
                       Edit
                     </button>
-                    <EditServiceAdmin prod={prod}/>
+                    <EditServiceAdmin prod={prod} />
                     <button className="btn btn-danger" onClick={() => {
                       console.log(prod.id)
                       let res: any = http.delete(`/api/thue-cong-viec/${prod.id}`);
@@ -138,7 +140,7 @@ const ServiceAdmin = (props: Props) => {
                       }
                     }}>Delete</button>
                   </td>
-                  
+
                 </tr>
 
               })}
@@ -151,7 +153,7 @@ const ServiceAdmin = (props: Props) => {
           {renderPaginationButtons()}
         </div>
       </div>
-      
+
       <CreateServiceModal />
 
     </div>
