@@ -5,11 +5,12 @@ import { DispatchType, RootState } from '../../redux/configStore';
 import { JobItemInterface, getFullJobArrayApi, getJobArrayApi } from '../../redux/reducers/admin/UserJobReducer';
 import { http } from '../../util/22-06-2023-08-41-20-config';
 import CreateJobModal from './CreateModal/CreateJobModal';
+import EditJobAdmin from './EditModal/EditJobAdmin';
 
 type Props = {}
 
 const JobAdmin = (props: Props) => {
-  const dispatch:DispatchType = useDispatch();
+  const dispatch: DispatchType = useDispatch();
   const { jobArray } = useSelector((state: RootState) => state.UserJobReducer);
   const getJobArray = async () => {
     const actionAsync = getJobArrayApi(1, 10, '');
@@ -29,8 +30,8 @@ const JobAdmin = (props: Props) => {
 
 
 
-  
-  
+
+
   const handlePaginationChange = (pageIndex: number) => {
     // Load data for the new page index
     const searchBar = document.getElementsByName('searchBar')[0] as HTMLInputElement;
@@ -84,16 +85,18 @@ const JobAdmin = (props: Props) => {
     );
   };
   return (
-    <div className='container-fluid my-3'>
+    <div className='AdminManagement container-fluid my-3 ' >
       <div className='row'>
-        <div className='col-2'>
-          <NavLink className="nav-link" to="/useradmin">User Management</NavLink>
-          <NavLink className="nav-link" to="/jobadmin">Job Management</NavLink>
-          <NavLink className="nav-link" to="/categoryadmin">Job Category Management</NavLink>
-          <NavLink className="nav-link" to="/serviceadmin">Service Management</NavLink>
+        <div className='col-2' style={{ borderRight: "3px solid #28a745", backgroundColor: "#f8f9fa" }}>
+          <div className="d-flex flex-column align-items-start p-4">
+          <NavLink className="nav-link mb-3" to="/useradmin"><i className="fas fa-user me-2"></i> User Management</NavLink>
+            <NavLink className="nav-link mb-3" to="/jobadmin"><i className="fas fa-briefcase me-2"></i>Job Management</NavLink>
+            <NavLink className="nav-link mb-3" to="/categoryadmin"> <i className="fas fa-list-alt me-2"></i>Job Category Management</NavLink>
+            <NavLink className="nav-link" to="/serviceadmin"><i className="fas fa-cog me-2"></i>Service Management</NavLink>
+          </div>
         </div>
         <div className='col-10'>
-        <div className='mb-3 d-flex justify-content-between'>
+          <div className='mb-3 d-flex justify-content-between'>
             {/* Create button */}
             <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#CreateJobModal">
               Create
@@ -114,8 +117,9 @@ const JobAdmin = (props: Props) => {
 
             </div>
           </div>
-          <table className="table table-bordered">
-            <thead>
+          <h2 className="h4 fw-bold text-center text-success">Job Management</h2> {/* Apply Bootstrap's h4 and fw-bold classes */}
+          <table className="table table-bordered table-striped">
+            <thead className="table-success">
               <tr>
                 <th>tenCongViec</th>
                 <th>nguoiTao</th>
@@ -125,30 +129,31 @@ const JobAdmin = (props: Props) => {
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
-            {jobArray?.data.map((prod: JobItemInterface, index: number) => {
-                return <tr>
+            <tbody >
+              {jobArray?.data.map((prod: JobItemInterface, index: number) => {
+                return <tr key={prod.id}>
                   <td>{prod?.tenCongViec}</td>
                   <td>{prod?.nguoiTao}</td>
                   <td>{prod?.moTaNgan}</td>
                   <td>{prod?.giaTien}</td>
                   <td>{prod?.saoCongViec}</td>
 
-                  <td>
-                    <button className="btn btn-primary">Edit</button>
-                  </td>
+                  <td><button type="button" className="btn btn-primary edit-button" data-bs-toggle="modal" data-bs-target={`#EditJobModal${prod.id}`}>
+                    Edit
+                  </button>
+                    <EditJobAdmin prod={prod} /></td>
                 </tr>
               })}
 
-             
 
-              
+
+
             </tbody>
           </table>
           {renderPaginationButtons()}
         </div>
       </div>
-      <CreateJobModal/>
+      <CreateJobModal />
     </div>
   )
 }

@@ -6,12 +6,13 @@ import { UserAdminData, getFullUserArrayApi, getUserArrayApi } from '../../redux
 import { http } from '../../util/22-06-2023-08-41-20-config'
 import { history } from '../..'
 import CreateUserModal from './CreateModal/CreateUserModal'
+import EditUserAdmin from './EditModal/EditUserAdmin'
 
 
 type Props = {}
 
 const UserAdmin = (props: Props) => {
-  const dispatch:DispatchType = useDispatch();
+  const dispatch: DispatchType = useDispatch();
   const { userArray, fullUserArray } = useSelector((state: RootState) => state.userAdminReducer);
   const getUserArray = async () => {
     const actionAsync = getUserArrayApi(1, 10, '');
@@ -96,15 +97,18 @@ const UserAdmin = (props: Props) => {
 
 
   return (
-    <div className='container-fluid my-3'>
+    <div className='AdminManagement container-fluid my-3'>
       <div className='row'>
-        <div className='col-2'>
-          <NavLink className="nav-link" to="/useradmin">User Management</NavLink>
-          <NavLink className="nav-link" to="/jobadmin">Job Management</NavLink>
-          <NavLink className="nav-link" to="/categoryadmin">Job Category Management</NavLink>
-          <NavLink className="nav-link" to="/serviceadmin">Service Management</NavLink>
+        <div className='col-2' style={{ borderRight: "3px solid #28a745", backgroundColor: "#f8f9fa" }}>
+          <div className="d-flex flex-column align-items-start p-4">
+            <NavLink className="nav-link mb-3" to="/useradmin"><i className="fas fa-user me-2"></i> User Management</NavLink>
+            <NavLink className="nav-link mb-3" to="/jobadmin"><i className="fas fa-briefcase me-2"></i>Job Management</NavLink>
+            <NavLink className="nav-link mb-3" to="/categoryadmin"> <i className="fas fa-list-alt me-2"></i>Job Category Management</NavLink>
+            <NavLink className="nav-link" to="/serviceadmin"><i className="fas fa-cog me-2"></i>Service Management</NavLink>
+          </div>
         </div>
         <div className='col-10'>
+        
           <div className='mb-3 d-flex justify-content-between'>
             {/* Create button */}
             <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#CreateUserModal">
@@ -126,10 +130,11 @@ const UserAdmin = (props: Props) => {
 
             </div>
           </div>
-          <table className='table table-bordered'>
-            <thead>
-              <tr>
-                <th>name</th>
+          <h2 className="h4 fw-bold text-center text-success">User Management</h2> {/* Apply Bootstrap's h4 and fw-bold classes */}
+          <table className='table table-bordered table-striped'>
+            <thead className="table-success text-light">
+              <tr >
+                <th >name</th>
                 <th>email</th>
                 <th>phone</th>
                 <th>gender</th>
@@ -139,7 +144,7 @@ const UserAdmin = (props: Props) => {
             </thead>
             <tbody>
               {userArray?.data.map((prod: UserAdminData, index: number) => {
-                return <tr>
+                return <tr key={prod.id} >
                   <td>{prod?.name}</td>
                   <td>{prod?.email}</td>
                   <td>{prod?.phone}</td>
@@ -147,11 +152,15 @@ const UserAdmin = (props: Props) => {
                   <td>{prod?.birthday}</td>
 
                   <td>
-                    <button className="btn btn-primary" onClick={() => {
-                      console.log(prod.gender);
-                    }}>Edit</button>
-                    <button className="btn btn-danger" onClick={() => {
-                      console.log("Before:", fullUserArray.length)
+                    <button type="button" className="btn btn-primary edit-button mx-2" data-bs-toggle="modal" data-bs-target={`#EditUserModal${prod.id}`}>
+                      Edit
+                    </button>
+                    <EditUserAdmin prod={prod} />
+
+
+
+                    <button className="btn btn-danger delete-button" onClick={() => {
+
                       let res: any = http.delete(`/api/users?id=${prod.id}`);
                       if (res) {
                         getFullUserArray();
@@ -174,7 +183,7 @@ const UserAdmin = (props: Props) => {
 
         </div>
       </div>
-      <CreateUserModal/>
+      <CreateUserModal />
     </div>
   );
 }

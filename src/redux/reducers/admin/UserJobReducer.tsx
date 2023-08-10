@@ -97,3 +97,17 @@ export const CreateJobAdminApi = (JobCreateAdmin: JobAdminCreateForm) => {
         }
     }
 }
+
+export const postEditJobApi = (JobAdminForm : JobAdminCreateForm, id:number) =>{
+    return async (dispatch: DispatchType) => {
+        let res = await http.put(`/api/cong-viec/${id}`,JobAdminForm );
+        
+        if (res) {
+            alert('Edit success')
+        }else{
+            alert('cannot Edit')
+        }
+
+
+    }
+}

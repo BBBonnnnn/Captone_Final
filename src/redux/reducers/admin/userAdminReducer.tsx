@@ -4,6 +4,7 @@ import { DispatchType } from '../../configStore';
 import { wait } from '@testing-library/user-event/dist/utils';
 import { UserAdminCreateForm } from '../../../pages/Admin/CreateModal/CreateUserModal';
 import { history } from '../../..';
+import { UserAdminCreateForm2 } from '../../../pages/Admin/EditModal/EditUserAdmin';
 export interface UserAdminData {
     id: number;
     name: string;
@@ -107,5 +108,20 @@ export const CreateUserAdminApi = (UserCreateAdmin: UserAdminCreateForm) => {
         } else {
             alert('Please check your Input again');
         }
+    }
+}
+
+
+export const postEditUserApi = (UserAdminForm : UserAdminCreateForm2, id:number) =>{
+    return async (dispatch: DispatchType) => {
+        let res = await http.put(`/api/users/${id}`,UserAdminForm );
+        
+        if (res) {
+            alert('Edit success')
+        }else{
+            alert('cannot Edit')
+        }
+
+
     }
 }

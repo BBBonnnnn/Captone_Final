@@ -87,13 +87,15 @@ const ServiceAdmin = (props: Props) => {
   };
 
   return (
-    <div className='container-fluid my-3'>
+    <div className='AdminManagement container-fluid my-3'>
       <div className='row'>
-        <div className='col-2'>
-          <NavLink className="nav-link" to="/useradmin">User Management</NavLink>
-          <NavLink className="nav-link" to="/jobadmin">Job Management</NavLink>
-          <NavLink className="nav-link" to="/categoryadmin">Job Category Management</NavLink>
-          <NavLink className="nav-link" to="/serviceadmin">Service Management</NavLink>
+        <div className='col-2' style={{ borderRight: "3px solid #28a745", backgroundColor: "#f8f9fa" }}>
+          <div className="d-flex flex-column align-items-start p-4">
+            <NavLink className="nav-link mb-3" to="/useradmin"><i className="fas fa-user me-2"></i> User Management</NavLink>
+            <NavLink className="nav-link mb-3" to="/jobadmin"><i className="fas fa-briefcase me-2"></i>Job Management</NavLink>
+            <NavLink className="nav-link mb-3" to="/categoryadmin"> <i className="fas fa-list-alt me-2"></i>Job Category Management</NavLink>
+            <NavLink className="nav-link" to="/serviceadmin"><i className="fas fa-cog me-2"></i>Service Management</NavLink>
+          </div>
         </div>
         <div className='col-10'>
           <div className='mb-3 d-flex justify-content-between'>
@@ -104,10 +106,11 @@ const ServiceAdmin = (props: Props) => {
 
 
           </div>
-          <table className="table table-bordered">
-            <thead>
+          <h2 className="h4 fw-bold text-center text-success">Service Management</h2> {/* Apply Bootstrap's h4 and fw-bold classes */}
+          <table className="table table-bordered table-striped">
+            <thead className="table-success">
               <tr>
-                <th>prod.id</th>
+                
                 <th>maCongViec</th>
                 <th>maNguoiThue</th>
                 <th>ngayThue</th>
@@ -117,19 +120,19 @@ const ServiceAdmin = (props: Props) => {
             </thead>
             <tbody>
               {serviceArray?.data.map((prod: ServiceAdminInterface, index: number) => {
-                return <tr key={prod.id}>
-                  <th>{prod?.id}</th>
+                return <tr key={prod.id} >
+                  
                   <td>{prod?.maCongViec}</td>
                   <td>{prod?.maNguoiThue}</td>
                   <td>{prod?.ngayThue}</td>
                   <td>{prod?.hoanThanh ? 'Đã  Hoàn Thành' : 'Chưa Hoàn Thành'}</td>
 
                   <td>
-                    <button type="button" className="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target={`#EditServiceModal${prod.id}`}>
+                    <button type="button" className="btn btn-primary edit-button mx-2" data-bs-toggle="modal" data-bs-target={`#EditServiceModal${prod.id}`}>
                       Edit
                     </button>
                     <EditServiceAdmin prod={prod} />
-                    <button className="btn btn-danger" onClick={() => {
+                    <button className="btn btn-danger delete-button" onClick={() => {
                       console.log(prod.id)
                       let res: any = http.delete(`/api/thue-cong-viec/${prod.id}`);
                       if (res) {
