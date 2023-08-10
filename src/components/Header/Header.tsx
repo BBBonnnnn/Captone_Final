@@ -30,25 +30,56 @@ const Header = (props: Props) => {
                 </li>
             </>
         }
-        return <>
-            <li className="nav-item">
-                <NavLink className="nav-link" to="/infouser">
-                    <i className="fa fa-user" aria-hidden="true" style={{color:'blue'}}></i>
-                </NavLink>
-            </li>
-            <li className="nav-item">
-                <span style={{ cursor: 'pointer' }} className="nav-link" onClick={() => {
-                    //clear localstore,cookie => dispatch userLogin = {}
-                    localStorage.removeItem(USER_LOGIN);
-                    localStorage.removeItem("userProfile");
-                    //dispatch
-                    let valueNull = {} as UserLogin;
-                    const action = loginAction(valueNull);
-                    dispatch(action);
-                    history.push('/login')
-                }}>Logout</span>
-            </li>
-        </>
+        else {
+            if (userLogin.user.role == 'ADMIN') {
+                return <>
+                    <li className="nav-item mx-4">
+                        <NavLink className="nav-link" to="/useradmin">User Management</NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/infouser">
+                            <i className="fa fa-user" aria-hidden="true" style={{ color: 'blue' }}></i>
+                        </NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <span style={{ cursor: 'pointer' }} className="nav-link" onClick={() => {
+                            //clear localstore,cookie => dispatch userLogin = {}
+                            localStorage.removeItem(USER_LOGIN);
+                            localStorage.removeItem("userProfile");
+                            //dispatch
+                            let valueNull = {} as UserLogin;
+                            const action = loginAction(valueNull);
+                            dispatch(action);
+                            history.push('/login')
+                        }}>Logout</span>
+                    </li>
+                </>
+            }
+            else{
+                return <>
+                
+                <li className="nav-item">
+                    <NavLink className="nav-link" to="/infouser">
+                        <i className="fa fa-user" aria-hidden="true" style={{ color: 'blue' }}></i>
+                    </NavLink>
+                </li>
+                <li className="nav-item">
+                    <span style={{ cursor: 'pointer' }} className="nav-link" onClick={() => {
+                        //clear localstore,cookie => dispatch userLogin = {}
+                        localStorage.removeItem(USER_LOGIN);
+                        localStorage.removeItem("userProfile");
+                        //dispatch
+                        let valueNull = {} as UserLogin;
+                        const action = loginAction(valueNull);
+                        dispatch(action);
+                        history.push('/login')
+                    }}>Logout</span>
+                </li>
+            </>
+            }
+
+        }
+
     }
     const handleChange = (e: any) => {
         const { value } = e.target;
@@ -92,16 +123,12 @@ const Header = (props: Props) => {
                     <li className="nav-item mx-4">
                         <NavLink className="nav-link" to="/register">Become a seller</NavLink>
                     </li>
-                    <li className="nav-item mx-4">
-                        <NavLink className="nav-link" to="/useradmin">User Management</NavLink>
-                    </li>
+
                     {/* <li className="nav-item mx-4">
                         <NavLink className="nav-link" to="/login">{renderLogin()}</NavLink>
                     </li> */}
                     {renderLogin()}
-                    <li className="nav-item mx-4">
-                        <NavLink className="nav-link btn btn-success border border-success" to="/register">Join</NavLink>
-                    </li>
+
                 </ul>
             </div>
         </nav>
