@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DispatchType, RootState } from '../../redux/configStore';
-import { SkinFilled } from '@ant-design/icons';
-import * as yup from 'yup';
 import { UserProfile, editProfile } from '../../redux/reducers/userReducer';
 import { getStoreJson } from '../../util/22-06-2023-08-41-20-config';
-
 type Props = {};
-
 export interface ProfileForm {
     email: string;
     phone: string;
@@ -16,6 +12,7 @@ export interface ProfileForm {
     gender: string;
     skill: string[];
     certification: string[];
+    role: string;
 }
 interface UserProps {
     userProfile: UserProfile | null
@@ -25,6 +22,7 @@ const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
     const { userLogin } = useSelector((state: RootState) => state.userReducer);
     const dispatch: DispatchType = useDispatch();
     const [formState, setFormState] = useState<ProfileForm>({
+        role: userProfile?.role || '',
         email: userProfile?.email || '',
         name: userProfile?.name || '',
         phone: userProfile?.phone ? String(userProfile.phone) : '',
@@ -37,6 +35,7 @@ const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
         const userProfileData = getStoreJson('userProfile');
         if (userProfileData) {
             setFormState({
+                role: userProfile?.role || '',
                 email: userProfileData?.email || '',
                 name: userProfileData?.name || '',
                 phone: userProfileData?.phone ? String(userProfileData.phone) : '',
@@ -47,7 +46,6 @@ const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
 
             });
         }
-        //console.log("formState.skill formState.skill : ", formState.skill, typeof formState.skill)
     }, []);
     const [errors, setErrors] = useState({
         "email": '',
@@ -55,22 +53,13 @@ const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
         "phone": '',
         "gender": 'gender cannot be null',
         "birthday": '',
-        // "skill": '',
-        // "certification": '',
     });
     useEffect(() => {
-        // This effect runs whenever the `errors` state changes
-        //console.log('Updated errors:', errors);
     }, [errors]);
-
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         const id = e.target.id;
-
-
-
-
         // Manually validate the field being changed
         let messageError = '';
         let dataType = e.target.getAttribute('data-type');
@@ -107,11 +96,6 @@ const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
                 }
             }
         }
-
-
-
-
-
         // Update the form state and errors state with the new values
         if (id == "skill" || id == "certification") {
             const arrayValue = value.split(",");
@@ -135,8 +119,6 @@ const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
                 [id]: messageError,
             }));
         }
-
-
         console.log("formState: ", formState);
     };
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -156,48 +138,40 @@ const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
             alert('check your Input again please');
         }
     };
-    
     return (
         <div className="modal fade bd-example-modal-lg" id="modalId" tabIndex={-1} data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
             <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title" id="modalTitleId">Edit profile</h5>
+                        <h4 className="modal-title text-primary fw-bold" id="modalTitleId">EDIT PROFILE</h4>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                     </div>
 
                     <div className="modal-body">
-                        <form className=" my-5" onSubmit={handleSubmit}>
-                            <div className="mb-3">
-                                <p>email</p>
-                                <input data-type="email" data-min-max-length="[9,30]" className="form-control" id="email" name="email" onChange={handleChange} value={formState.email} />
-                                <p className='text text-danger'>{errors.email}</p>
-                            </div>
-                            <div className="mb-3">
-                                <p>Phone</p>
-                                <input data-type="number" data-min-max-length="[9,10]" className="form-control" id="phone" name="phone" onChange={handleChange} value={formState.phone} />
-                                <p className='text text-danger'>{errors.phone}</p>
-                            </div>
-
-                            <div className="mb-3">
-                                <label htmlFor="name">Name</label>
-                                <input data-type="letter" className="form-control" id="name" name="name" onChange={handleChange} value={formState.name} />
-                                <p className='text text-danger'>{errors.name}</p>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="birthday">Birthday</label>
-                                <input
-                                    type="date"
-                                    className="form-control"
-                                    id="birthday"
-                                    name="birthday"
-                                    onChange={handleChange}
-                                    value={formState.birthday}
-                                />
-                                <p className='text text-danger'>{errors.birthday}</p>
-                            </div>
-                            <div className="mb-3">
-                                <p>Gender</p>
+                        <form className=" my-5 row justify-content-center" onSubmit={handleSubmit}>
+                            <div className='col-6'>
+                                <div className="mb-3">
+                                    <p>EMAIL</p>
+                                    <input data-type="email" data-min-max-length="[9,50]" className="form-control" id="email" name="email" onChange={handleChange} value={formState.email} />
+                                    <p className='text text-danger'>{errors.email}</p>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="name">NAME</label>
+                                    <input data-type="letter" className="form-control" id="name" name="name" onChange={handleChange} value={formState.name} />
+                                    <p className='text text-danger'>{errors.name}</p>
+                                </div>
+                                <div className="mb-3">
+                                    <label >SKILLS</label>
+                                    <input
+                                        className="form-control"
+                                        id="skill"
+                                        name="skill"
+                                        onChange={handleChange}
+                                        value={Array.isArray(formState.skill) ? formState.skill.join(',') : formState.skill}
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                <p>GENDER</p>
                                 <div className="form-group">
                                     <label>
                                         <input
@@ -223,33 +197,43 @@ const ProfileModal2: React.FC<UserProps> = ({ userProfile }) => {
                                 </div>
                                 <p className='text text-danger'>{errors.gender}</p>
                             </div>
-                            
-                            <div className="mb-3">
-                                <label >Skills</label>
-                                <input
-                                    className="form-control"
-                                    id="skill"
-                                    name="skill"
-                                    onChange={handleChange}
-                                    value={ Array.isArray(formState.skill)  ? formState.skill.join(',') : formState.skill}
-                                />
-
                             </div>
-                            <div className="mb-3">
-                                <label >certifications</label>
-                                <input
-                                    className="form-control"
-                                    id="certification"
-                                    name="certification"
-                                    onChange={handleChange}
-                                    value={Array.isArray(formState.certification) ? formState.certification.join(',') : formState.certification}
-                                />
-
+                            <div className='col-6'>
+                                <div className="mb-3">
+                                    <p>PHONE</p>
+                                    <input data-type="number" data-min-max-length="[9,10]" className="form-control" id="phone" name="phone" onChange={handleChange} value={formState.phone} />
+                                    <p className='text text-danger'>{errors.phone}</p>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="birthday">BIRTHDAY</label>
+                                    <input
+                                        type="date"
+                                        className="form-control"
+                                        id="birthday"
+                                        name="birthday"
+                                        onChange={handleChange}
+                                        value={formState.birthday}
+                                    />
+                                    <p className='text text-danger'>{errors.birthday}</p>
+                                </div>
+                                <div className="mb-3">
+                                    <label >CERTIFICATION</label>
+                                    <input
+                                        className="form-control"
+                                        id="certification"
+                                        name="certification"
+                                        onChange={handleChange}
+                                        value={Array.isArray(formState.certification) ? formState.certification.join(',') : formState.certification}
+                                    />
+                                </div>
+                                
                             </div>
-
-                            <button type="submit" className="btn btn-primary">
+                            <button type="submit" className="btn btn-primary w-25">
                                 Save Changes
                             </button>
+
+
+                           
                         </form>
 
                     </div>

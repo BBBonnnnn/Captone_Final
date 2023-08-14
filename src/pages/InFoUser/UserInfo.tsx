@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react'
-import bankimg from '../../assets/img/bank.jpg'
 import { useDispatch, useSelector } from 'react-redux'
 import { DispatchType, RootState } from '../../redux/configStore'
-import { editProfile, getProfileApi } from '../../redux/reducers/userReducer'
-import { useFormik } from 'formik'
-import * as yup from 'yup'
+import { getProfileApi } from '../../redux/reducers/userReducer'
 import ProfileModal2 from './profileModal2'
 import RenderList from './RenderList'
+import { Image } from 'antd';
 type Props = {}
 
-const UserInfo = (props: Props) => {
+
+const UserInfo = () => {
+  console.log('11123232')
   const dispatch: DispatchType = useDispatch();
   const { userLogin, userProfile } = useSelector((state: RootState) => state.userReducer);
-  const ssss = { ...userProfile };
+  console.log('userProfile', userProfile)
   const renderGender = () => {
     if (userProfile?.gender == true) {
       return <p>Male</p>
@@ -30,13 +30,17 @@ const UserInfo = (props: Props) => {
         <div className='col-6'>
           <div className='card w-75'>
             <div className='card-header'>
-              <img src="http://i.pravatar.cc?u=400" alt="" className='w-50  d-block m-auto rounded-circle' />
+              <Image
+                src={`http://i.pravatar.cc?u=${Math.floor(Math.random() * 500) + 1} `}
+                className='w-50  d-block m-auto rounded-circle'
+              />
               <p className='text-center mt-4'>{userProfile?.name}</p>
               <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalId">
-              <i className="fa fa-user-edit mx-2"></i>
-                 <span>Edit Profile</span></button>
+                <i className="fa fa-user-edit mx-2"></i>
+                <span>Edit Profile</span></button>
               <ProfileModal2 userProfile={userProfile} />
             </div>
+
             <div className='card-body d-flex justify-content-between'>
               <div className='col-6'>
                 <p>From</p>
@@ -94,7 +98,7 @@ const UserInfo = (props: Props) => {
               <div className='row'>
                 <div className='col-6'>
                   <h4> Skills</h4>
-                  <p>Add your skills</p>
+                  <p>{userProfile?.skill}</p>
                 </div>
                 <div className='col-6 text-primary text-end'>
                   Add now
@@ -114,7 +118,7 @@ const UserInfo = (props: Props) => {
               <div className='row'>
                 <div className='col-6'>
                   <h4>Certification</h4>
-                  <p>Add your Certification</p>
+                  <p>{userProfile?.certification}</p>
                 </div>
                 <div className='col-6 text-primary text-end'>
                   Add now
@@ -127,7 +131,7 @@ const UserInfo = (props: Props) => {
           <div className='card p-2'>
             <div className='row'>
               <div className='col-2 m-auto text-center'>
-                <img src={bankimg} alt="" className='w-100 p-1' />
+                <img src={process.env.PUBLIC_URL + '/assets/img/bank.jpg'} alt="" className='w-100 p-1' />
               </div>
               <div className='col-10 p-2'>
                 <p>Buying services for work? Help us tallor your experience to fit your needs</p>
@@ -147,24 +151,7 @@ const UserInfo = (props: Props) => {
             </div>
           </div>
           <div className='card'>
-            {/* <div className='row py-4'>
-              <div className='col-4 my-auto'>
-                <img src={bankimg} alt="" className='w-100 p-1' />
-              </div>
-              <div className='col-8'>
-                <h3>Lập trình viên front-End với reactjs</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit minus tempora aperiam libero explicabo. Corrupti accusamus consequatur labore iure quibusdam.</p>
-                <div className='text-end'>
-                  <button className='mx-2'>View detail</button>
-                  <button className='mx-2'>Edit</button>
-                  <button className='mx-2'>Delete</button>
-                </div>
-              </div>
-            </div> */}
-            
-           
-          <RenderList />
-          
+            <RenderList />
           </div>
         </div>
       </div>

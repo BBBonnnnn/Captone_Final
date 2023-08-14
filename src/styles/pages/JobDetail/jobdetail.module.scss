@@ -1,0 +1,27 @@
+.cardCustom {
+   transition:all 0.6s
+}
+.viewdetail{
+  transition:all 0.6s
+}
+
+.price{
+  transition:all 0.6s
+}
+
+
+.cardCustom:hover {
+  -webkit-box-shadow: -1px 1px 5px 5px rgba(0,67,26,1);
+-moz-box-shadow: -1px 1px 5px 5px rgba(0,67,26,1);
+box-shadow: -1px 1px 5px 5px rgba(0,67,26,1);
+  transform:scale(1.02)
+}
+
+.cardCustom:hover .viewdetail{
+  transform: translateX(10px);
+}
+
+.cardCustom:hover .price{
+  font-size: 18px;
+  color: red;
+}

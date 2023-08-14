@@ -61,7 +61,6 @@ const userReducer = createSlice({
 
         getProfileAction: (state: UserState, action: PayloadAction<UserProfile>) => {
             state.userProfile = action.payload;
-            console.log("state.userProfile: ", state.userProfile);
         },
     }
 });
@@ -81,17 +80,14 @@ export const loginActionApi = (userLoginFrom: FormValue) => {
             //Tạo action đưa lên reducer
             const action: PayloadAction<UserLogin> = loginAction(res.data.content);
             dispatch(action);
+            alert('Login Success!')
             history.push("/");
         }else{
             alert('Login failed please check again')
         }
-
-
     }
 }
-
 export const getProfileApi = (id:number) => {
-    // console.log('here1');
     return async (dispatch: DispatchType) => {
         let res = await http.get(`/api/users/${id}`);
         if (res) {
@@ -118,7 +114,7 @@ export const editProfile = (id:number | undefined , values:any) =>{
             setStoreJson("userProfile", res.data.content);
             const action : PayloadAction<UserProfile> = getProfileAction(res.data.content);
             dispatch(action);
-            alert('edit thanh cong')
+            alert('Edit success!!!')
         }
 
 

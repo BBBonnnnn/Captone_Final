@@ -1,7 +1,36 @@
 import { createSlice } from '@reduxjs/toolkit'
-import axios from 'axios';
+import { http } from '../../util/22-06-2023-08-41-20-config';
+import { DispatchType } from '../configStore';
 
-const initialState = {
+export interface itemJob {
+    id:                 number;
+    congViec:           CongViec;
+    tenLoaiCongViec:    string;
+    tenNhomChiTietLoai: string;
+    tenChiTietLoai:     string;
+    tenNguoiTao:        string;
+    avatar:             string;
+}
+
+export interface CongViec {
+    id:                    number;
+    tenCongViec:           string;
+    danhGia:               number;
+    giaTien:               number;
+    nguoiTao:              number;
+    hinhAnh:               string;
+    moTa:                  string;
+    maChiTietLoaiCongViec: number;
+    moTaNgan:              string;
+    saoCongViec:           number;
+}
+
+export interface StateType{
+    arrDetailJob: itemJob[]
+}
+
+
+const initialState:StateType = {
     arrDetailJob:[]
 }
 
@@ -9,26 +38,17 @@ const detailJob = createSlice({
   name: 'detailJob',
   initialState,
   reducers: {
-    getDetailJobAction:(state,action)=>{
+    getDetailJobAction:(state:StateType,action)=>{
         state.arrDetailJob=action.payload
     }
   }
 });
-
 export const {getDetailJobAction} = detailJob.actions
-
 export default detailJob.reducer
-
-export const getDetailJobByJobIdApi=(id:any)=>{
-    return async (dispatch:any) =>{
+export const getDetailJobByJobIdApi=(id:number)=>{
+    return async (dispatch:DispatchType) =>{
         try {
-            const res = await axios({
-                url: `https://fiverrnew.cybersoft.edu.vn/api/cong-viec/lay-cong-viec-theo-chi-tiet-loai/${id}`,
-                method: 'GET',
-                headers: {
-                  TokenCybersoft: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA0NSIsIkhldEhhblN0cmluZyI6IjA4LzEyLzIwMjMiLCJIZXRIYW5UaW1lIjoiMTcwMTk5MzYwMDAwMCIsIm5iZiI6MTY3MjA3NDAwMCwiZXhwIjoxNzAyMTQxMjAwfQ.1MKFgiR_REeXZ8RKBhPFQLyitVek8kDJ3u1JPaCB1MU`
-                }
-              })
+            const res = await http.get(`api/cong-viec/lay-cong-viec-theo-chi-tiet-loai/${id}`)
             const action = getDetailJobAction(res.data.content);
             dispatch(action)
         }

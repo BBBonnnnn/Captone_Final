@@ -1,7 +1,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route, unstable_HistoryRouter as HistoryRouter, Navigate } from 'react-router-dom';
+import { Routes, Route, unstable_HistoryRouter as HistoryRouter, Navigate } from 'react-router-dom';
 import { createBrowserHistory, BrowserHistory } from 'history';
 import Home from './pages/Home/Home';
 import HeaderAndFooter from './templates/HeaderAndFooter';
@@ -12,11 +12,14 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import { Provider } from 'react-redux'
 import { store } from './redux/configStore';
-import './assets/scss/style.scss'
-import Search from './pages/Search.tsx/Search';
+import './styles/style.scss'
+import Search from './pages/Search/Search';
 import UserInfo from './pages/InFoUser/UserInfo';
-
-
+import AdminTemplates from './templates/AdminTemplates';
+import UserAdmin from './pages/Admin/UserAdmin';
+import JobAdmin from './pages/Admin/JobAdmin';
+import CategoryAdmin from './pages/Admin/CategoryAdmin';
+import ServiceAdmin from './pages/Admin/ServiceAdmin';
 
 
 
@@ -28,9 +31,8 @@ root.render(
   <Provider store={store}>
     <HistoryRouter history={history}>
       <Routes>
-       
-        <Route  element={<HeaderAndFooter />}>
         <Route index element={<Home />}></Route>
+        <Route element={<HeaderAndFooter />}>
           <Route path='/search'>
             <Route path=':name' element={<Search />} ></Route>
           </Route>
@@ -39,16 +41,20 @@ root.render(
           </Route>
           <Route path='/jobtype'>
             <Route path=':id' element={<JobType />} ></Route>
-
-          </Route>  
+          </Route>
           <Route path='/infojob'>
             <Route path=':id' element={<InFoJob />} ></Route>
           </Route>
           <Route path='/infouser' element={<UserInfo />}></Route>
+          <Route path='/login' element={<Login />}></Route>
+          <Route path='/register' element={<Register />}></Route>
         </Route>
-
-        <Route path='/login' element={<Login />}></Route>
-        <Route path='/register' element={<Register />}></Route>
+        <Route element={<AdminTemplates />}>
+        <Route path='/useradmin' element={<UserAdmin/>}></Route>
+        <Route path='/jobadmin' element={<JobAdmin/>}></Route>
+        <Route path='/categoryadmin' element={<CategoryAdmin/>}></Route>
+        <Route path='/serviceadmin' element={<ServiceAdmin/>}></Route>
+        </Route>
         <Route path='*' element={<Navigate to="" />}></Route>
       </Routes>
 

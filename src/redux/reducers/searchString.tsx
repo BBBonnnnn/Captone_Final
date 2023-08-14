@@ -1,7 +1,7 @@
 import { createSlice,PayloadAction } from '@reduxjs/toolkit'
 
 interface KeywordState {
-  keyword:string
+  keyword:string|undefined
 }
 
 const initialState:KeywordState = {
@@ -12,7 +12,7 @@ const searchString = createSlice({
   name: 'searchStringReducer',
   initialState,
   reducers: {
-    getKeyWordAction:(state:KeywordState,action)=>{
+    getKeyWordAction:(state:KeywordState,action:PayloadAction<string|undefined>)=>{
         state.keyword=action.payload
     }
   }

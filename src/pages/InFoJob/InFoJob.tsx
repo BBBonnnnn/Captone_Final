@@ -1,42 +1,43 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
-import { getDetailJobByJobIdApi } from '../../redux/reducers/detailJob';
-import axios from 'axios';
-import { SketchOutlined, DownOutlined } from '@ant-design/icons';
-import { RootState } from '../../redux/configStore';
-import  {rentJobApi}  from '../../redux/reducers/rentJob';
+import { useParams } from 'react-router-dom';
+import { DispatchType, RootState } from '../../redux/configStore';
+import { rentJobApi } from '../../redux/reducers/rentJob';
 import { addCommentApi } from '../../redux/reducers/addComent';
 import { useFormik } from 'formik';
+import { commentType, getCommentApi } from '../../redux/reducers/getComent';
+import { getInfoJobtApi, job } from '../../redux/reducers/getInfoJob';
+import { history } from '../..'
+import styles from '../../styles/pages/InFoJob/infojob.module.scss'
 type Props = {}
-
 const DetailJob = (props: Props) => {
   const { userLogin } = useSelector((state: RootState) => state.userReducer);
   const { commentData } = useSelector((state: RootState) => state.addComent);
-  const navigate =useNavigate();
-  const dispatch = useDispatch();
+  const { arrComment } = useSelector((state: RootState) => state.getComent);
+  const { infoJob } = useSelector((state: RootState) => state.getInfoJob);
+  const dispatch: DispatchType = useDispatch();
   const param = useParams();
-  const [mainArrJob, setMainArrJob] = useState([]);
-  const detailID = useRef();
-  const [comment,setComment ]= useState([]);
-  const [menuJobList, setMenuJobList] = useState({
-    content: [],
+  const [pricePackage, setPricePackeage] = useState({
+    namepackage: 'BASIC',
+    price: 1000,
+    time: 15,
+    page: 1
   });
   const currentDate = new Date();
-const year = currentDate.getFullYear();
-const hours = String(currentDate.getHours()).padStart(2, '0');
-const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-const day = String(currentDate.getDate()).padStart(2, '0');
-const formattedDate = `${hours}:${minutes}:${seconds} , ${day}/${month}/${year}`;
+  const year = currentDate.getFullYear();
+  const hours = String(currentDate.getHours()).padStart(2, '0');
+  const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+  const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  const formattedDate = `${hours}:${minutes}:${seconds} , ${day}/${month}/${year}`;
   const frm = useFormik({
     initialValues: {
-      comment:'',
+      comment: '',
     },
-    onSubmit:(value)=>{
-      if(userLogin.token){
-        const commentData = {
+    onSubmit: (value) => {
+      if (userLogin.token) {
+        const commentDataa = {
           id: 0,
           maCongViec: param.id,
           maNguoiBinhLuan: userLogin.user.id,
@@ -44,131 +45,62 @@ const formattedDate = `${hours}:${minutes}:${seconds} , ${day}/${month}/${year}`
           noiDung: value.comment,
           saoBinhLuan: 5
         }
-        const actionAsyns:any = addCommentApi(commentData);
+        const actionAsyns = addCommentApi(commentDataa);
         dispatch(actionAsyns);
       }
     }
   })
-  // API lấy menu loại công việc
-  const getMenuJobListApi = async () => {
-    try {
-      const res = await axios({
-        url: 'https://fiverrnew.cybersoft.edu.vn/api/cong-viec/lay-menu-loai-cong-viec',
-        method: 'GET',
-        headers: {
-          TokenCybersoft: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA0NSIsIkhldEhhblN0cmluZyI6IjA4LzEyLzIwMjMiLCJIZXRIYW5UaW1lIjoiMTcwMTk5MzYwMDAwMCIsIm5iZiI6MTY3MjA3NDAwMCwiZXhwIjoxNzAyMTQxMjAwfQ.1MKFgiR_REeXZ8RKBhPFQLyitVek8kDJ3u1JPaCB1MU`
-        }
-      })
-      setMenuJobList(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // API comment
-  const getCommentAPI = async () => {
-    try {
-      const res = await axios({
-        url: `https://fiverrnew.cybersoft.edu.vn/api/binh-luan/lay-binh-luan-theo-cong-viec/${param.id}`,
-        method: 'GET',
-        headers: {
-          TokenCybersoft: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA0NSIsIkhldEhhblN0cmluZyI6IjA4LzEyLzIwMjMiLCJIZXRIYW5UaW1lIjoiMTcwMTk5MzYwMDAwMCIsIm5iZiI6MTY3MjA3NDAwMCwiZXhwIjoxNzAyMTQxMjAwfQ.1MKFgiR_REeXZ8RKBhPFQLyitVek8kDJ3u1JPaCB1MU`
-        }
-      })
-      setComment(res.data.content);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getdetailJobByJobIdApiFunction = async () => {
-    const actionAsyns: any = getDetailJobByJobIdApi(detailID.current);
+  const getComment = () => {
+    const actionAsyns = getCommentApi(param.id)
     dispatch(actionAsyns)
-  };
-  const getInFoJobApi = async () => {
-    try {
-      const res = await axios({
-        url: `https://fiverrnew.cybersoft.edu.vn/api/cong-viec/lay-cong-viec-chi-tiet/${param.id}`,
-        method: 'GET',
-        headers: {
-          TokenCybersoft: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA0NSIsIkhldEhhblN0cmluZyI6IjA4LzEyLzIwMjMiLCJIZXRIYW5UaW1lIjoiMTcwMTk5MzYwMDAwMCIsIm5iZiI6MTY3MjA3NDAwMCwiZXhwIjoxNzAyMTQxMjAwfQ.1MKFgiR_REeXZ8RKBhPFQLyitVek8kDJ3u1JPaCB1MU`
-        }
-      })
-      setMainArrJob(res.data.content);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(()=>{
-    getCommentAPI();
-  },[commentData])
+  }
+  const getInfoJob = () => {
+    const actionAsyns = getInfoJobtApi(param.id)
+    dispatch(actionAsyns)
+  }
   useEffect(() => {
-    getInFoJobApi();
-    getCommentAPI();
-    getMenuJobListApi();
+    getComment();
+  }, [commentData])
+  useEffect(() => {
+    getInfoJob();
+    getComment();
   }, [])
   return (
     <div className='container'>
-      <ul className='border-bottom p-3 text-center d-flex justify-content-center'>
-        {menuJobList.content?.map((item: any) => {
-          return <div className="dropdown mx-4" key={item.id}>
-            <NavLink className='my-0 d-block ' style={{ textDecoration: 'none', color: 'black' }} onClick={() => {
-            }} to={`/jobtype/${item.id}`}>{item.tenLoaiCongViec}</NavLink>
-            <button className="btn btn-light dropdown-toggle p-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            </button>
-            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1" style={{ width: '300px' }}>
-              {item.dsNhomChiTietLoai.map((item: any, index: any) => {
-                return <div className='text-center' key={index}>
-                  <div className='fw-bold'>{item.tenNhom}</div>
-                  {item.dsChiTietLoai.map((ite: any, index: any) => {
-                    return <div key={index}>
-                      <NavLink to={`/joblist/${ite.id}`} style={{ cursor: 'pointer' }} onClick={() => {
-                        detailID.current = ite.id;
-                        console.log('abccccc', detailID.current)
-                        getdetailJobByJobIdApiFunction()
-                      }}>
-                        {ite.tenChiTiet}
-                      </NavLink>
-                    </div>
-                  })}
-                </div>
-              })}
-            </ul>
-          </div>
-
-        })}
-      </ul>
-      {mainArrJob.map((item: any) => {
-        return <div>
+      {infoJob.map((item: job, index: number) => {
+        return <div key={index}>
           <div className='text-primary'>{item.tenLoaiCongViec} <i className="fa fa-angle-right mx-2"></i>{item.tenNhomChiTietLoai}<i className="fa fa-angle-right mx-2"></i>{item.tenChiTietLoai} </div>
           <div className='row'>
-            <div className='col-6'>
-              <h5>{item.congViec.tenCongViec}</h5>
+            <div className='col-md-6 col-sm-12'>
+              <h4>{item.congViec.tenCongViec}</h4>
               <div className='d-flex'>
-                <img className='mx-2' src={item.avatar} alt="..." style={{ width: '30px', height: '30px' }} />
+                <img className='mx-2 rounded-circle' src={item.avatar} alt="..." style={{ width: '30px', height: '30px' }} />
                 <p>{item.tenNguoiTao}</p>
-                <div className='mx-2'>
+                <div className='mx-2' style={{ color: '#f8f64d ' }}>
+                  Top Rated Seller |
                   <i className="fa fa-star"></i>
                   <i className="fa fa-star"></i>
                   <i className="fa fa-star"></i>
                   <i className="fa fa-star"></i>
                   <i className="fa fa-star me-2"></i>
-                  ({item.congViec.danhGia})
+                  <span style={{ color: '#11a94e' }}>({item.congViec.danhGia})</span>
                 </div>
                 <p className='mx-2'>4 Order in QueQue</p>
-                <p className='mx-2'>FIVER'S CHOICE</p>
+                <p className='mx-2 border border-success'>FIVER'S CHOICE</p>
               </div>
               <hr />
               <p>
-                <SketchOutlined />
-                Buyers keep returning! Lorem ipsum dolor, sit amet consectetur adipisicing.
+                <img src={process.env.PUBLIC_URL + '/assets/img/best-seller.png'} alt="..." style={{ width: '45px' }} className='me-3' />
+                <b>Buyers keep returning!</b> {item.tenNguoiTao} has an exceptional number of repeat buyers.
               </p>
-              <p>
+              <div>
                 <img src={item.congViec.hinhAnh} alt="..." style={{ width: '500px', height: '500px' }} />
                 <div className='d-flex'>
                   <img src={item.congViec.hinhAnh} alt="..." style={{ width: '80px', height: '60px' }} className=' m-2' />
                   <img src={item.congViec.hinhAnh} alt="..." style={{ width: '80px', height: '60px' }} className=' m-2' />
                   <img src={item.congViec.hinhAnh} alt="..." style={{ width: '80px', height: '60px' }} className='m-2' />
                 </div>
-              </p>
+              </div>
               <div className='mt-5'>
                 <h3> About this gif</h3>
                 <p>Top Rated Seller with all positive reviews</p>
@@ -208,16 +140,24 @@ const formattedDate = `${hours}:${minutes}:${seconds} , ${day}/${month}/${year}`
               <div className='my-3'>
                 <h3>About the Seller</h3>
                 <div className='d-flex'>
-                  <img src={item.avatar} alt="..." style={{ width: '150px' }} />
+                  <img src={item.avatar} alt="..." style={{ width: '150px' }} className='rounded-circle' />
                   <div className='mx-3'>
-                    <p>Name</p>
-                    <p>Job</p>
-                    <p>star</p>
+                    <p>Name :{item.tenNguoiTao} </p>
+                    <p>Job:{item.tenLoaiCongViec}</p>
+                    <p>
+                      star:
+                      <span className='mx-2' style={{ color: '#f8f64d ' }}>
+                        <i className="fa fa-star"></i>
+                        <i className="fa fa-star"></i>
+                        <i className="fa fa-star"></i>
+                        <i className="fa fa-star"></i>
+                        <i className="fa fa-star me-2"></i>
+                      </span>
+                    </p>
                     <button>Contact Me</button>
                   </div>
                 </div>
               </div>
-
               <div className='my-5 group '>
                 <h3 className='my-4'>FAQ</h3>
                 <div className="accordion" id="accordionExample">
@@ -270,12 +210,15 @@ const formattedDate = `${hours}:${minutes}:${seconds} , ${day}/${month}/${year}`
                     </div>
                   </div>
                 </div>
-
               </div>
               <div className='rate row'>
                 <div className='col-6'>
-                  <h3 className='d-inline mx-2'>335 Reviews</h3>
-                  <span>
+                  <h3 className='d-inline mx-2'>{infoJob?.map((item: job) => {
+                    return <span key={item.id}>
+                      {item.congViec.danhGia}
+                    </span>
+                  })} Reviews</h3>
+                  <span style={{ color: '#f8f64d ' }}>
                     <i className="fa fa-star"></i>
                     <i className="fa fa-star"></i>
                     <i className="fa fa-star"></i>
@@ -310,7 +253,11 @@ const formattedDate = `${hours}:${minutes}:${seconds} , ${day}/${month}/${year}`
                       </div>
                     </div>
                     <div className='col-2'>
-                      <p>(333)</p>
+                      <p>{infoJob?.map((item: job) => {
+                        return <span key={item.id}>
+                          ({item.congViec.danhGia})
+                        </span>
+                      })}</p>
                       <p>(2)</p>
                       <p>(0)</p>
                       <p>(0)</p>
@@ -337,7 +284,7 @@ const formattedDate = `${hours}:${minutes}:${seconds} , ${day}/${month}/${year}`
                       <p>Recommend to a friend</p>
                       <p>Service as described</p>
                     </div>
-                    <div className='col-4'>
+                    <div className='col-4' style={{ color: '#f8f64d ' }}>
                       <p>
                         5<i className="fa fa-star"></i>
                       </p>
@@ -367,19 +314,16 @@ const formattedDate = `${hours}:${minutes}:${seconds} , ${day}/${month}/${year}`
               </div>
               <hr />
               <div className='comment'>
-                {comment?.map((comment: any, index: number) => {
+                {arrComment?.map((comment: commentType, index: number) => {
                   return <div key={index} className='my-4'>
-                    <div className='d-flex justify-content-between'>
-                      <div className='d-flex justify-content-between' style={{ width: '20%' }}>
-                        <img src={comment.avatar} alt="" style={{ width: '50px' }} />
-                        <p className=''>
+                    <div className='row justify-content-between'>
+                      <div className='justify-content-between col-8' >
+                        <img src={comment.avatar} alt="" style={{ width: '50px', height: '50px' }} className='' />
+                        <span className=''>
                           {comment.tenNguoiBinhLuan}
-                          <i className="fa fa-splotch ms-2"></i>
-                          {comment.saoBinhLuan}
-                          <p ><i className="fa fa-flag-usa"></i></p>
-                        </p>
+                        </span>
                       </div>
-                      <div>
+                      <div className='col-4 text-end'>
                         {comment.ngayBinhLuan}
                       </div>
                     </div>
@@ -387,66 +331,88 @@ const formattedDate = `${hours}:${minutes}:${seconds} , ${day}/${month}/${year}`
                     <p>
                       <span ><i className="fa fa-thumbs-up"></i>Like</span>
                       <span className='mx-3'><i className="fa fa-thumbs-down"></i>Dislike</span>
+                      <i className="fa fa-splotch ms-2" style={{ color: '#f8f64d ' }}></i>
+                      {comment.saoBinhLuan}
                     </p>
-                    <hr />  
+                    <hr />
                   </div>
                 })}
-                <img  className='mt-5' src="http://i.pravatar.cc?u=500" alt="" style={{width:'40px'}}/>
+                <img className='mt-5' src={process.env.PUBLIC_URL + '/assets/img/listen.png'} alt="" style={{ width: '40px',border:'solid 1px' }} />
                 <form className="form-floating my-1" onSubmit={frm.handleSubmit} id='frm'>
                   <textarea className="form-control" placeholder="Leave a comment here" id="comment" style={{ height: 100 }} defaultValue={""} name='comment' onChange={frm.handleChange} onBlur={frm.handleBlur} />
                   <label htmlFor="comment">Comments</label>
-                  <button type='submit' className='btn btn-primary mt-5' style={{borderRadius:'0'}} onClick={()=>{
+                  <button type='submit' className='btn btn-primary mt-5' style={{ borderRadius: '0' }} onClick={() => {
                   }}>Add comment</button>
                 </form>
               </div>
             </div>
-            <div className='col-6'>
-
-              <div className="card" style={{ width: '30rem' }}>
-                <div className='card-header d-flex justify-content-between  m-0 align-items-center'>
-                  <p className='text-center m-0 border-end' style={{ width: '30%' }}>VIP</p>
-                  <p className='text-center m-0 border-end' style={{ width: '40%' }}>CUSTOM</p>
-                  <p className='text-center m-0' style={{ width: '30%' }}>NORMAL</p>
+            <div className='col-md-6 col-sm-12'>
+              <div className="card" style={{ width: '75%' }}>
+                <div className='card-header  text-white d-flex justify-content-between  m-0 align-items-center p-3' style={{ backgroundColor: '#14c55b' }}>
+                  <p className={`text-center m-0 border-end ${styles.cardbuton}`} style={{ width: '30%', cursor: 'pointer' }} onClick={() => {
+                    setPricePackeage({
+                      namepackage: 'BASIC',
+                      price: 1000,
+                      time: 15,
+                      page: 1
+                    })
+                  }}>BASIC</p>
+                  <p className={`text-center m-0 border-end ${styles.cardbuton}`} style={{ width: '40%', cursor: 'pointer' }} onClick={() => {
+                    setPricePackeage({
+                      namepackage: 'STANDARD',
+                      price: 2000,
+                      time: 25,
+                      page: 3
+                    })
+                  }}>STANDARD</p>
+                  <p className={`text-center m-0 ${styles.cardbuton}`} style={{ width: '30%', cursor: 'pointer' }} onClick={() => {
+                    setPricePackeage({
+                      namepackage: 'PREMIUM',
+                      price: 4000,
+                      time: 35,
+                      page: 5
+                    })
+                  }}>PREMIUM</p>
                 </div>
-                <div className="card-body">
+                <div className="card-body mt-5">
                   <h5 className="card-title d-flex justify-content-between">
-                    <p>Standard</p>
-                    <p>1000$</p>
+                    <p style={{ color: '#14c55b' }}>{pricePackage.namepackage}</p>
+                    <p style={{ color: '#14c55b' }}>{pricePackage.price}$</p>
                   </h5>
-                  <p className="card-text">Some quick example text to build on the card title and make.</p>
+                  <p className="card-text my-5">Some quick example text to build on the card title and make.</p>
                   <div>
-                    <p>Standard</p>
-                    <p><i className="fab fa-viacoin"></i>Standard</p>
-                    <p><i className="fab fa-viacoin"></i>Standard</p>
-                    <p><i className="fab fa-viacoin"></i>Standard</p>
-                    <p><i className="fab fa-viacoin"></i>Standard</p>
-                    <p><i className="fab fa-viacoin"></i>Standard</p>
+                    <p>{pricePackage.time} Day delivery</p>
+                    <p><i className="fa fa-check me-3" style={{ color: '#14c55b' }}></i>Design Customization</p>
+                    <p><i className="fa fa-check me-3" style={{ color: '#14c55b' }}></i>Content Upload</p>
+                    <p><i className="fa fa-check me-3" style={{ color: '#14c55b' }}></i>Reponsive Design</p>
+                    <p><i className="fa fa-check me-3" style={{ color: '#14c55b' }}></i>Include Source Code</p>
+                    <p><i className="fa fa-check me-3" style={{ color: '#14c55b' }}></i>{pricePackage.page} Page</p>
                   </div>
                   <div className='form-group'>
-                    <button  className="btn btn-primary form-control" onClick={()=>{
-                        if(userLogin == null){
-                          navigate('/login')
-                        }else if(userLogin.token){
-                          const rentJobData = {
-                            id: 0 ,
-                            maCongViec: param.id,
-                            maNguoiThue: userLogin.user.id,
-                            ngayThue: '',
-                            hoanThanh: true
-                          }
-                          const actionAsyns:any = rentJobApi(rentJobData);
-                          dispatch(actionAsyns);
+                    <button style={{ backgroundColor: '#14c55b',color:'white' }} className={`btn  form-control ${styles.cardbuton}`} onClick={() => {
+                      if (userLogin == null) {
+                        alert('You need Sign-In !!')
+                        history.push('/login')
+                      } else if (userLogin.token) {
+                        const rentJobData = {
+                          id: 0,
+                          maCongViec: param.id,
+                          maNguoiThue: userLogin.user.id,
+                          ngayThue: '',
+                          hoanThanh: true
                         }
-                    }}>Continue (1000$)</button>
+                        const actionAsyns = rentJobApi(rentJobData);
+                        dispatch(actionAsyns);
+                      }
+                    }}>Continue ({pricePackage.price}$)</button>
+                    <h5 className='mt-4 text-center' style={{ color: '#14c55b' }}>Compare packages</h5>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       })}
-
     </div>
   )
 }

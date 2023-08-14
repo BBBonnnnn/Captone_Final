@@ -5,6 +5,9 @@ import * as yup from 'yup';
 import { DispatchType } from '../../redux/configStore';
 import { http } from '../../util/22-06-2023-08-41-20-config';
 import { history } from '../..';
+import { Checkbox } from 'antd';
+import type { CheckboxValueType } from 'antd/es/checkbox/Group';
+import { useSpring, animated } from '@react-spring/web'
 export interface FormRegister {
   email: string | null,
   password: string | null,
@@ -17,8 +20,23 @@ export interface FormRegister {
 
 
 type Props = {}
-
+const onChange:any = (checkedValues: CheckboxValueType[]) => {
+  console.log('checked = ', checkedValues);
+};
 const Register = (props: Props) => {
+  const props1 = useSpring({
+    from: { rotate: 0 },
+    to: async (next) => {
+      while (true) {
+        await next({ rotate: 3 });
+        await next({ rotate: 0 });
+        await next({ rotate: -3 });
+        await next({ rotate: 0 });
+      }
+    },
+    config: { duration: 1500 },
+  });
+
   const dispatch: DispatchType = useDispatch();
 
   const frm = useFormik<FormRegister>({
@@ -39,80 +57,99 @@ const Register = (props: Props) => {
       birthday: yup.string().required('gender can not be blank!'),
     }),
     onSubmit: async (values: FormRegister) => {
-      let res = await http.post('/api/auth/signup', values);
+      let res = await http.post('/api/auth/signup',values);
       if (res) {
-        alert('successful registration');
+        console.log('123',values)
+        alert('successful registration!!');
 
         history.push('/')
       } else {
-        alert('Please check your Input again');
+        alert('Email already exists!!');
       }
     }
   })
 
   return (
-    <form className='container w-25 card my-5' onSubmit={frm.handleSubmit}>
-      <div className='card-header text-center'>
-        <h3>Register</h3>
-      </div>
-      <div className='card-body'>
-        <div className='row'>
-          <div className='col-6'>
-            <div className='form-group'>
-              <p>Name</p>
-              <input className='form-control' id='name' name='name' onChange={frm.handleChange} onBlur={frm.handleBlur} />
+    <form className='container w-50 border my-5' onSubmit={frm.handleSubmit} style={{ borderRadius: '20px', height: '700px' }}>
+      <div className='row h-100 align-items-center'>
+        <div className='col-6'>
+        <animated.h3
+          className='text-center'
+         style={{
+          color: 'rgb(83, 146, 249)',
+          transform: props1.rotate.interpolate((val) => `rotate(${val}deg)`),
+        }} 
+        >Register</animated.h3>
+          <div>
+            <div className='form-group text-center mb-4'>
+              <div className='d-flex align-items-center'>
+                <i className="fa fa-user-astronaut me-2"></i>
+                <input className='form-control' id='name' name='name' onChange={frm.handleChange} onBlur={frm.handleBlur} />
+              </div>
               {frm.errors.name && <p className='text-danger'>{frm.errors.name}</p>}
             </div>
-          </div>
-          <div className='col-6'>
-            <div className='form-group'>
-              <p>Phone</p>
-              <input className='form-control' id='phone' name='phone' onChange={frm.handleChange} onBlur={frm.handleBlur} />
+            <div className='form-group text-center mb-4'>
+              <div className=' d-flex align-items-center'>
+                <i className="fa fa-phone-volume me-2"></i>
+                <input className='form-control' id='phone' name='phone' onChange={frm.handleChange} onBlur={frm.handleBlur} />
+              </div>
               {frm.errors.phone && <p className='text-danger'>{frm.errors.phone}</p>}
             </div>
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-6'>
-            <div className='form-group'>
-              <p>Email</p>
-              <input className='form-control' id='email' name='email' onChange={frm.handleChange} onBlur={frm.handleBlur} />
+            <div className='form-group text-center mb-4'>
+              <div className=' d-flex align-items-center'>
+                <i className="fa fa-mail-bulk me-2"></i>
+                <input className='form-control' id='email' name='email' onChange={frm.handleChange} onBlur={frm.handleBlur} />
+              </div>
               {frm.errors.email && <p className='text-danger'>{frm.errors.email}</p>}
             </div>
-          </div>
-          <div className='col-6'>
-            <div className='form-group'>
-              <p>Password</p>
-              <input className='form-control' id='password' name='password' type='password' onChange={frm.handleChange} onBlur={frm.handleBlur} />
+            <div className='form-group text-center mb-4'>
+              <div className=' d-flex align-items-center'>
+                <i className="fa fa-key me-2"></i>
+                <input className='form-control' id='password' name='password' type='password' onChange={frm.handleChange} onBlur={frm.handleBlur} />
+              </div>
               {frm.errors.password && <p className='text-danger'>{frm.errors.password}</p>}
             </div>
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-6'>
-            <div className='form-group'>
-              <p>BirthDay</p>
-              <input className='form-control' id='birthday' name='birthday' type="date" onChange={frm.handleChange} onBlur={frm.handleBlur} />
+            <div className='form-group text-center mb-4'>
+              <div className='d-flex align-items-center'>
+                <i className="fa fa-birthday-cake me-2"></i>
+                <input className='form-control' id='birthday' name='birthday' type="date" onChange={frm.handleChange} onBlur={frm.handleBlur} />
+              </div>
               {frm.errors.birthday && <p className='text-danger'>{frm.errors.birthday}</p>}
             </div>
-          </div>
-          <div className='col-6 '>
-            <p>Gender</p>
-            <div className='d-flex justify-content-start align-items-center'>
-              <div className='form-group'>
-                <label htmlFor="men" className='mx-2'>Men</label>
-                <input type='radio' id='men' value='true' name='gender' onChange={frm.handleChange} />
+            <div className='form-group text-center mb-4'>
+              <div className='d-flex align-items-center '>
+                <i className="fa fa-transgender-alt me-2"></i>
+                <div className='form-group'>
+                  <label htmlFor="men" className='mx-2'>Men</label>
+                  <input type='radio' id='men' value='true' name='gender' onChange={frm.handleChange} />
+                </div>
+                <div className='form-group'>
+                  <label htmlFor="women" className='mx-2'>Women</label>
+                  <input type='radio' id='women' value='false' name='gender' onChange={frm.handleChange} />
+                </div>
               </div>
-              <div className='form-group'>
-                <label htmlFor="women" className='mx-2'>Women</label>
-                <input type='radio' id='women' value='false' name='gender' onChange={frm.handleChange} />
-              </div>
+              {frm.errors.gender && <p className='text text-danger'>{frm.errors.gender}</p>}
             </div>
-            {frm.errors.gender && <p className='text text-danger'>{frm.errors.gender}</p>}
+            <Checkbox onChange={onChange}>I agree all statements in <span style={{color: 'rgb(83, 146, 249)'}}>Terms of service</span></Checkbox>
+          </div>
+          <div className='form-group  mt-3'>
+            <button type='submit' className='btn btn-primary  w-100' style={{color:'white'}}>Register</button>
+            <hr />
+            <p className='text-center'> or continue with</p>
           </div>
         </div>
-        <div className='form-group text-center mt-3'>
-          <button type='submit' className='btn btn-success'>Register</button>
+        <div className='col-6'>
+          <animated.img
+        src={process.env.PUBLIC_URL + '/assets/img/signup.jpg'}
+         style={{
+          width: '100%',
+          height: '100%',
+          transform: props1.rotate.interpolate((val) => `rotate(${val}deg)`),
+        }} 
+        />
+          <p className='text-center' style={{color: 'rgb(83, 146, 249)',cursor:'pointer'}} onClick={()=>{
+            history.push('/login')
+          }}>i'm member already</p>
         </div>
       </div>
     </form>

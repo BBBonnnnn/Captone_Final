@@ -1,7 +1,6 @@
-import axios, { InternalAxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { history } from '../index'
 // import jwt_decode from "jwt-decode";
-
 //setup hằng số
 export const DOMAIN = 'https://fiverrnew.cybersoft.edu.vn';
 export const TOKEN = 'token';
@@ -92,10 +91,10 @@ http.interceptors.response.use((res) => {
         history.push('/admin/login');
     }
     if (err.response?.status === 400) {
-        alert('Request Failed Please do it again');
-        
+        // alert('Request Failed Please do it again');
+        history.push("/");
     }
-    return Promise.reject(err);
+    return //Promise.reject(err);
 });
 
 /* statusCode thông dụng : 
