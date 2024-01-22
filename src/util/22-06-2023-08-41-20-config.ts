@@ -5,7 +5,7 @@ import { history } from '../index'
 export const DOMAIN = 'https://fiverrnew.cybersoft.edu.vn';
 export const TOKEN = 'token';
 export const USER_LOGIN = 'userLogin';
-export const tokenCybersoft  = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA0NSIsIkhldEhhblN0cmluZyI6IjA4LzEyLzIwMjMiLCJIZXRIYW5UaW1lIjoiMTcwMTk5MzYwMDAwMCIsIm5iZiI6MTY3MjA3NDAwMCwiZXhwIjoxNzAyMTQxMjAwfQ.1MKFgiR_REeXZ8RKBhPFQLyitVek8kDJ3u1JPaCB1MU`
+export const tokenCybersoft  = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJOb2RlSlMgMzUiLCJIZXRIYW5TdHJpbmciOiIwNi8wNC8yMDI0IiwiSGV0SGFuVGltZSI6IjE3MTIzNjE2MDAwMDAiLCJuYmYiOjE2OTM3NjA0MDAsImV4cCI6MTcxMjUwOTIwMH0.kYxfDLYqqdr6Pok2qn6JOou-ueahcR4_LIHLVJZrJfo`
 
 export const { getStoreJson, setStoreJson, getStore, setStore } = {
     getStoreJson: (name: string): any => {

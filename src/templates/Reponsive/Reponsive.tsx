@@ -36,7 +36,7 @@ const Reponsive = (props: Props) => {
         }
     },[])
     let component=props.component
-    if(screen.width<768 && props.mobileComponent){
+    if(screen.width<992 && props.mobileComponent){
         component = props.mobileComponent
     }
          

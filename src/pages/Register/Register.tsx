@@ -20,7 +20,7 @@ export interface FormRegister {
 
 
 type Props = {}
-const onChange:any = (checkedValues: CheckboxValueType[]) => {
+const onChange: any = (checkedValues: CheckboxValueType[]) => {
   console.log('checked = ', checkedValues);
 };
 const Register = (props: Props) => {
@@ -57,9 +57,9 @@ const Register = (props: Props) => {
       birthday: yup.string().required('gender can not be blank!'),
     }),
     onSubmit: async (values: FormRegister) => {
-      let res = await http.post('/api/auth/signup',values);
+      let res = await http.post('/api/auth/signup', values);
       if (res) {
-        console.log('123',values)
+        console.log('123', values)
         alert('successful registration!!');
 
         history.push('/')
@@ -73,13 +73,13 @@ const Register = (props: Props) => {
     <form className='container w-50 border my-5' onSubmit={frm.handleSubmit} style={{ borderRadius: '20px', height: '700px' }}>
       <div className='row h-100 align-items-center'>
         <div className='col-6'>
-        <animated.h3
-          className='text-center'
-         style={{
-          color: 'rgb(83, 146, 249)',
-          transform: props1.rotate.interpolate((val) => `rotate(${val}deg)`),
-        }} 
-        >Register</animated.h3>
+          <animated.h3
+            className='text-center'
+            style={{
+              color: 'rgb(83, 146, 249)',
+              transform: props1.rotate.interpolate((val) => `rotate(${val}deg)`),
+            }}
+          >Register</animated.h3>
           <div>
             <div className='form-group text-center mb-4'>
               <div className='d-flex align-items-center'>
@@ -130,24 +130,24 @@ const Register = (props: Props) => {
               </div>
               {frm.errors.gender && <p className='text text-danger'>{frm.errors.gender}</p>}
             </div>
-            <Checkbox onChange={onChange}>I agree all statements in <span style={{color: 'rgb(83, 146, 249)'}}>Terms of service</span></Checkbox>
+            <Checkbox onChange={onChange}>I agree all statements in <span style={{ color: 'rgb(83, 146, 249)' }}>Terms of service</span></Checkbox>
           </div>
           <div className='form-group  mt-3'>
-            <button type='submit' className='btn btn-primary  w-100' style={{color:'white'}}>Register</button>
+            <button type='submit' className='btn btn-primary  w-100' style={{ color: 'white' }}>Register</button>
             <hr />
             <p className='text-center'> or continue with</p>
           </div>
         </div>
         <div className='col-6'>
           <animated.img
-        src={process.env.PUBLIC_URL + '/assets/img/signup.jpg'}
-         style={{
-          width: '100%',
-          height: '100%',
-          transform: props1.rotate.interpolate((val) => `rotate(${val}deg)`),
-        }} 
-        />
-          <p className='text-center' style={{color: 'rgb(83, 146, 249)',cursor:'pointer'}} onClick={()=>{
+            src={process.env.PUBLIC_URL + '/assets/img/signup.jpg'}
+            style={{
+              width: '100%',
+              height: '100%',
+              transform: props1.rotate.interpolate((val) => `rotate(${val}deg)`),
+            }}
+          />
+          <p className='text-center' style={{ color: 'rgb(83, 146, 249)', cursor: 'pointer' }} onClick={() => {
             history.push('/login')
           }}>i'm member already</p>
         </div>

@@ -7,7 +7,7 @@ const FooterMobile = (props: Props) => {
     return (
         <div className='container row m-auto' style={{ paddingBottom: '100px' }}>
             <hr />
-            <div className='col-md-3 col-sm-6'>
+            <div className='col-md-3 col-sm-6 col-6 '>
                 <h3>Catagoles</h3>
                 <p>Graphics & Design</p>
                 <p>Digital Marketing</p>
@@ -20,7 +20,7 @@ const FooterMobile = (props: Props) => {
                 <p>Lifestyle</p>
                 <p>Sittemap</p>
             </div>
-            <div className='col-md-3 col-sm-6'>
+            <div className='col-md-3 col-sm-6 col-6'>
                 <h3>About</h3>
                 <p>Careers</p>
                 <p>Press & News</p>
@@ -30,7 +30,7 @@ const FooterMobile = (props: Props) => {
                 <p>Intellectual Property Clalms</p>
                 <p>Investor Relations</p>
             </div>
-            <div className='col-md-3 col-sm-6'>
+            <div className='col-md-3 col-sm-6 col-6'>
                 <h3>Community</h3>
                 <p>Events</p>
                 <p>Blog</p>
@@ -41,7 +41,7 @@ const FooterMobile = (props: Props) => {
                 <p>Become a seller</p>
                 <p>Fiverr Elevate</p>
             </div>
-            <div className='col-md-3 col-sm-6'>
+            <div className='col-md-3 col-sm-6 col-6'>
                 <h3>More From Fiverr</h3>
                 <p>Fiverr Pro</p>
                 <p>Fiverr Studio</p>

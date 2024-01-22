@@ -4,8 +4,6 @@ import * as yup from 'yup';
 import { loginActionApi } from '../../redux/reducers/userReducer';
 import { useDispatch, } from 'react-redux';
 import { DispatchType } from '../../redux/configStore'
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-import { GoogleLogin } from 'react-google-login';
 import { useSpring, animated } from '@react-spring/web'
 export interface FormValue {
   email: string | null,
@@ -93,7 +91,7 @@ const Login = (props: Props) => {
               <button type='submit' className='btn btn-primary w-100'>Login</button>
             </div>
           </div>
-          <div className='row my-4' style={{ color: 'rgb(83, 146, 249)' }}>
+          <div className='row my-4 w-100' style={{ color: 'rgb(83, 146, 249)' }}>
             <div className='col-6'>
               Create Account
             </div>
@@ -109,24 +107,9 @@ const Login = (props: Props) => {
           <hr />
           <div className='d-flex justify-content-evenly'>
             <div >
-              <FacebookLogin
-                appId="1398528477358841"
-                autoLoad={false}
-                fields="name,email,picture"
-                onClick={componentClicked}
-                callback={responseFacebook}
-                render={(renderProps: any) => (
-                  <button className='btn btn-primary py-2' onClick={renderProps.onClick}>Facebook</button>
-                )} />
+             
             </div>
             <div>
-              <GoogleLogin
-                clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
-                buttonText="Login"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                cookiePolicy={'single_host_origin'}
-              />
             </div>
           </div>
           <p style={{ fontSize: '11px' }} className='my-4 text-center'>By signing in, I agree to Fiverr's <span style={{ color: 'rgb(83, 146, 249)' }}>Terms of Use</span> and <span style={{ color: 'rgb(83, 146, 249)' }}>Privacy Policy</span>.</p>

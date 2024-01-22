@@ -126,10 +126,10 @@ const Home = (props: AnyProps) => {
               <div className='col-3 text-white me-2 ' style={{ listStyleType: 'none' }}>Popular:</div>
             </div>
             <div className='col-10 d-flex w-75 justify-content-start ' style={{ boxSizing: 'border-box' }}>
-              <div className='me-3 text-white border p-1 rounded-pill' style={{ listStyleType: 'none' }}>Website Design</div>
-              <div className='me-3 text-white border p-1 rounded-pill' style={{ listStyleType: 'none' }}>WordPress</div>
-              <div className='me-3 text-white border p-1 rounded-pill' style={{ listStyleType: 'none' }}>Logo Design</div>
-              <div className='me-3 text-white border p-1 rounded-pill' style={{ listStyleType: 'none' }}>Dropshipping</div>
+              <div className='container me-3 text-white border p-1 rounded-pill w-25' style={{ listStyleType: 'none' }}>Website Design</div>
+              <div className='me-3 text-white border p-1 rounded-pill w-25' style={{ listStyleType: 'none' }}>WordPress</div>
+              <div className='me-3 text-white border p-1 rounded-pill w-25' style={{ listStyleType: 'none' }}>Logo Design</div>
+              <div className='me-3 text-white border p-1 rounded-pill w-25' style={{ listStyleType: 'none' }}>Dropshipping</div>
             </div>
           </ul>
         </div>
@@ -221,7 +221,7 @@ const Home = (props: AnyProps) => {
               videostart.play();
             }}>
               <div className='modalImg'>
-                <img className="modal-img" src={process.env.PUBLIC_URL + '/assets/img/selling.png'} alt="..." />
+                <img className="modal-img w-100" src={process.env.PUBLIC_URL + '/assets/img/selling.png'} alt="..."  />
               </div>
             </button>
             <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex={-1} aria-hidden="true">
@@ -251,7 +251,7 @@ const Home = (props: AnyProps) => {
               videostart2.play();
             }}>
               <div className='modalImg'>
-                <img className="modal-img" src={process.env.PUBLIC_URL + '/assets/img/video2.png'} alt="..." />
+                <img className="modal-img w-100" src={process.env.PUBLIC_URL + '/assets/img/video2.png'} alt="..." />
               </div>
             </button>
             {/* Modal */}
@@ -278,7 +278,7 @@ const Home = (props: AnyProps) => {
       <div className='py-5'>
         <h3>Explore the marketplace</h3>
         <div className='row w-75 m-auto my-5'>
-          <div className='col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
+          <div className='col-6 col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
             {
               history.push('/jobtype/372')
             }
@@ -286,13 +286,13 @@ const Home = (props: AnyProps) => {
             <img src={process.env.PUBLIC_URL + '/assets/img/coding.png'} alt='...' style={{ width: '100px' }}></img>
             <p>Programing & Tech</p>
           </div>
-          <div className='col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
+          <div className='col-6 col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
             history.push('/jobtype/5')
           }}>
             <img src={process.env.PUBLIC_URL + '/assets/img/listen.png'} alt='...' style={{ width: '100px' }}></img>
             <p>Music & Audio</p>
           </div>
-          <div className='col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
+          <div className='col-6 col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
             {
               history.push('/jobtype/371')
             }
@@ -300,7 +300,7 @@ const Home = (props: AnyProps) => {
             <img src={process.env.PUBLIC_URL + '/assets/img/daily-tasks.png'} alt='...' style={{ width: '100px' }}></img>
             <p>Lifestyle</p>
           </div>
-          <div className='col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
+          <div className='col-6 col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
             {
               history.push('/jobtype/370')
             }
@@ -310,7 +310,7 @@ const Home = (props: AnyProps) => {
           </div>
         </div>
         <div className='row w-75 m-auto my-5'>
-          <div className='col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
+          <div className='col-6 col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
             {
               history.push('/jobtype/1')
             }
@@ -318,7 +318,7 @@ const Home = (props: AnyProps) => {
             <img src={process.env.PUBLIC_URL + '/assets/img/designer.png'} alt='...' style={{ width: '100px' }}></img>
             <p>Graphics & Design</p>
           </div>
-          <div className='col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
+          <div className='col-6 col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
             {
               history.push('/jobtype/4')
             }
@@ -326,7 +326,7 @@ const Home = (props: AnyProps) => {
             <img src={process.env.PUBLIC_URL + '/assets/img/video-camera.png'} alt='...' style={{ width: '100px' }}></img>
             <p>Video & Animation</p>
           </div>
-          <div className='col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
+          <div className='col-6 col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
             {
               history.push('/jobtype/3')
             }
@@ -334,7 +334,7 @@ const Home = (props: AnyProps) => {
             <img src={process.env.PUBLIC_URL + '/assets/img/writing.png'} alt='...' style={{ width: '100px' }}></img>
             <p>Writing & Translation</p>
           </div>
-          <div className='col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
+          <div className='col-6 col-sm-6 col-md-3' style={{ cursor: 'pointer' }} onClick={() => {
             {
               history.push('/jobtype/2')
             }
